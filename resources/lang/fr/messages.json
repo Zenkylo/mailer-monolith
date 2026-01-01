@@ -1,0 +1,15 @@
+{
+  "greeting": "Bonjour utilisateur!",
+  "auth": {
+    "login": {
+      "title": "Connexion",
+      "success": "Connexion réussie"
+    }
+  },
+  "errors": {
+    "rate_limited": "Limite de taux dépassée. Veuillez réessayer plus tard. { limit } demandes autorisées, { remaining } restantes. Réessayez dans { availableIn } secondes.",
+    "route_not_found": "La route demandée n'a pas été trouvée.",
+    "bad_request": "La demande était invalide.",
+    "unauthorized": "Vous n'êtes pas autorisé à effectuer cette action!"
+  }
+}

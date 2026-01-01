@@ -1,0 +1,99 @@
+<template>
+  <div class="h-screen flex flex-col items-center justify-center bg-base-100">
+    <!-- <LocaleChanger /> -->
+    <ThemeChanger />
+
+    <form
+      @submit.prevent="submit"
+      class="card card-border card-sm max-w-sm w-full outline-2 outline-base-200"
+    >
+      <!-- <div class="card-body fr jb ic gap-2">
+        <h1 class="text-lg font-semibold">Hello, do the login...</h1>
+        <i class="pi pi-envelope text-lg"></i>
+      </div> -->
+      <div class="card-body border-y border-base-300 gap-5">
+        <div class="f fc gap-2">
+          <label for="email" class="label">Email</label>
+          <input
+            type="email"
+            class="input w-full"
+            id="email"
+            v-model="form.email"
+            required
+            autofocus
+            autocomplete="email"
+          />
+        </div>
+        <div class="f fc gap-2">
+          <label for="password" class="label">Password</label>
+          <input
+            type="password"
+            class="input w-full"
+            id="password"
+            v-model="form.password"
+            required
+            autocomplete="current-password"
+          />
+        </div>
+      </div>
+      <div class="card-body f fr jb ic gap-2">
+        <div class="f fr js ic gap-0">
+          <a href="/" class="btn btn-ghost btn-sm">Cancel</a>
+          <Link class="btn btn-ghost btn-sm" href="/auth/forgot-password">Forgot Password?</Link>
+          <Link class="btn btn-ghost btn-sm" href="/auth/register">Register</Link>
+        </div>
+        <button type="submit" class="btn btn-sm btn-primary">Login</button>
+      </div>
+    </form>
+  </div>
+</template>
+
+<script setup>
+import { ref, reactive, computed, onMounted } from 'vue'
+import { useHttp } from '~/plugins/NetworkClient'
+import layout from '~/layouts/public.vue'
+
+import { useAppToast } from '~/composables/toast'
+const toast = useAppToast()
+
+const value = ref(null)
+const items = ref([])
+
+const search = (event) => {
+  items.value = [...Array(10).keys()].map((item) => event.query + '-' + item)
+}
+
+import { useLocalStorage } from '~/composables/useLocalStorage'
+import { useI18n } from 'vue-i18n'
+import { Link, router } from '@inertiajs/vue3'
+const http = useHttp()
+const { setItem, getItem } = useLocalStorage()
+
+defineOptions({ layout })
+
+const props = defineProps({
+  user: Object,
+  flashMessages: Object,
+  meow: String,
+})
+
+const form = reactive({
+  email: 'user@user.com',
+  password: 'asdasd',
+})
+
+async function submit() {
+  try {
+    const response = await http.post('/auth/login', form)
+    router.visit('/dashboard', {
+      method: 'get',
+    })
+  } catch (error) {
+    toast.add({
+      severity: 'error',
+      summary: error.response?.data?.error || 'Login failed',
+      life: 3000,
+    })
+  }
+}
+</script>

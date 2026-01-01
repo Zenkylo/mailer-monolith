@@ -1,0 +1,21 @@
+{
+  "greeting": "Hello user!",
+  "auth": {
+    "login": {
+      "title": "Login boi",
+      "success": "Login successful",
+      "email": {
+        "sent": "Email sent!"
+      }
+    },
+    "register": {
+      "success": "Looks good. Check your email for a verification link."
+    }
+  },
+  "errors": {
+    "rate_limited": "Rate limit exceeded. Please try again later. { limit } requests allowed, { remaining } remaining. Try again in { availableIn } seconds.",
+    "route_not_found": "The requested route was not found.",
+    "bad_request": "The request was invalid.",
+    "unauthorized": "You are not authorized to perform this action."
+  }
+}

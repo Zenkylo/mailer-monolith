@@ -1,0 +1,221 @@
+@import 'tailwindcss';
+@plugin "daisyui" {
+  themes:
+    light --default,
+    dark --prefersdark;
+}
+
+/* Light */
+@plugin "daisyui/theme" {
+  name: 'mylight';
+  default: true;
+  prefersdark: false;
+  color-scheme: 'light';
+  --color-base-100: oklch(98% 0.002 247.839);
+  --color-base-200: oklch(96% 0.003 264.542);
+  --color-base-300: oklch(92% 0.006 264.531);
+  --color-base-content: oklch(14% 0.005 285.823);
+  --color-primary: oklch(63% 0.237 25.331);
+  --color-primary-content: oklch(100% 0 0);
+  --color-secondary: oklch(62% 0.265 303.9);
+  --color-secondary-content: oklch(100% 0 0);
+  --color-accent: oklch(79% 0.184 86.047);
+  --color-accent-content: oklch(100% 0 0);
+  --color-neutral: oklch(92% 0.006 264.531);
+  --color-neutral-content: oklch(14% 0.005 285.823);
+  --color-info: oklch(68% 0.169 237.323);
+  --color-info-content: oklch(89.04% 0.062 264.052);
+  --color-success: oklch(72% 0.219 149.579);
+  --color-success-content: oklch(90.395% 0.035 142.495);
+  --color-warning: oklch(70% 0.213 47.604);
+  --color-warning-content: oklch(96% 0.001 286.375);
+  --color-error: oklch(63% 0.237 25.331);
+  --color-error-content: oklch(96% 0.001 286.375);
+  --radius-selector: 0.25rem;
+  --radius-field: 0.25rem;
+  --radius-box: 0.25rem;
+  --size-selector: 0.21875rem;
+  --size-field: 0.21875rem;
+  --border: 1px;
+  --depth: 1;
+  --noise: 0;
+}
+
+/* Dark */
+@plugin "daisyui/theme" {
+  name: 'mydark';
+  default: false;
+  prefersdark: false;
+  color-scheme: 'dark';
+  --color-base-100: oklch(14% 0.005 285.823);
+  --color-base-200: oklch(15% 0.006 285.885);
+  --color-base-300: oklch(17% 0.006 286.033);
+  --color-base-content: oklch(96% 0.001 286.375);
+  --color-primary: oklch(63% 0.237 25.331);
+  --color-primary-content: oklch(100% 0 0);
+  --color-secondary: oklch(62% 0.265 303.9);
+  --color-secondary-content: oklch(100% 0 0);
+  --color-accent: oklch(79% 0.184 86.047);
+  --color-accent-content: oklch(100% 0 0);
+  --color-neutral: oklch(0% 0 0);
+  --color-neutral-content: oklch(100% 0 0);
+  --color-info: oklch(68% 0.169 237.323);
+  --color-info-content: oklch(89.04% 0.062 264.052);
+  --color-success: oklch(72% 0.219 149.579);
+  --color-success-content: oklch(90.395% 0.035 142.495);
+  --color-warning: oklch(70% 0.213 47.604);
+  --color-warning-content: oklch(19.359% 0.042 109.769);
+  --color-error: oklch(63% 0.237 25.331);
+  --color-error-content: oklch(96% 0.001 286.375);
+  --radius-selector: 0.25rem;
+  --radius-field: 0.25rem;
+  --radius-box: 0.25rem;
+  --size-selector: 0.21875rem;
+  --size-field: 0.21875rem;
+  --border: 1px;
+  --depth: 1;
+  --noise: 0;
+}
+
+.f {
+  @apply flex;
+}
+
+.fr {
+  @apply flex-row;
+}
+
+.fc {
+  @apply flex-col;
+}
+
+.fw {
+  @apply flex-wrap;
+}
+
+.js {
+  @apply justify-start;
+}
+
+.je {
+  @apply justify-end;
+}
+
+.jc {
+  @apply justify-center;
+}
+
+.jb {
+  @apply justify-between;
+}
+
+.ja {
+  @apply justify-around;
+}
+
+.is {
+  @apply items-start;
+}
+
+.ist {
+  @apply items-stretch;
+}
+
+.ie {
+  @apply items-end;
+}
+
+.ic {
+  @apply items-center;
+}
+
+.ib {
+  @apply items-baseline;
+}
+
+.sa {
+  @apply self-auto;
+}
+
+.ss {
+  @apply self-start;
+}
+
+.se {
+  @apply self-end;
+}
+
+.sc {
+  @apply self-center;
+}
+
+.sb {
+  @apply self-baseline;
+}
+
+.f1 {
+  @apply flex-1;
+}
+
+#app {
+  @apply h-screen;
+}
+
+.card {
+  @apply border-base-300 bg-base-200;
+}
+
+.table {
+  @apply border-t border-base-300;
+}
+
+.table tr {
+  @apply border-base-300;
+}
+
+.table tr td {
+  @apply border-rose-400;
+}
+
+/*
+    * This css was copy paste from
+    * node_modules/@vue-js-cron/light/dist/light.css
+    * and modified to use tailwindcss classes.
+    */
+.cron-light {
+  @apply p-0;
+  @apply flex flex-row justify-start items-center gap-1 text-sm flex-wrap;
+}
+.cron-light .cl-btn {
+  @apply btn btn-sm;
+}
+
+.cron-light .cl-menu {
+  @apply bg-base-200 border-base-300 shadow-lg;
+}
+
+.cron-light .cl-menu .cl-col {
+  @apply cursor-pointer hover:bg-base-300 p-2 !text-xs;
+}
+
+.cron-light .cl-menu .cl-col.selected {
+  @apply bg-primary;
+}
+
+/* Applying DaisyUI styling to Primevue toasts */
+.alert-toast {
+  @apply max-w-72;
+}
+
+/* first child of alert-toast */
+.alert-toast > div:first-child {
+  @apply flex flex-col items-end gap-1;
+}
+
+.alert-toast .alert {
+  @apply leading-tight;
+}
+
+.navbar {
+  @apply min-h-10;
+}

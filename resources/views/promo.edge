@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html data-theme="mydark">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title inertia>AdonisJS x Inertia x VueJS</title>
+
+    @vite(['inertia/css/daisy.css'])
+
+
+
+</head>
+
+<body>
+
+    <div class="drawer">
+        <div class="drawer-content flex flex-col">
+            <!-- Navbar -->
+            <div class="navbar bg-base-300 w-full max-h-12">
+                <div class="mx-2 flex-1 px-2 font-semibold">Saas App</div>
+                <div class="hidden flex-none lg:block">
+                    <ul class="menu menu-horizontal pr-0">
+                        <!-- Navbar menu content here -->
+                        @eval(await auth.check())
+                        @if(auth.isAuthenticated)
+                        <li><a href="/dashboard" class="btn btn-sm">{{auth.user.email}}
+
+                            </a></li>
+                        @else
+                        <li><a href="/auth/register" class="btn btn-sm mr-2">Register</a></li>
+                        <li><a href="/auth/login" class="btn btn-sm">Login</a></li>
+                        @endif
+                    </ul>
+                </div>
+            </div>
+            <!-- Page content here -->
+            <main class="p-5 f fc jc ic">
+                <h1
+                    class="text-3xl font-bold mb-1 text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">
+                    Some Promo Page</h1>
+                <p class="mb-5">This is the content of the promotional page.</p>
+            </main>
+        </div>
+    </div>
+
+
+</body>
+
+</html>

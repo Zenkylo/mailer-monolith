@@ -1,0 +1,14 @@
+{
+  "greeting": "Hola usuario!",
+  "auth": {
+    "login": {
+      "title": "Iniciar sesión",
+      "success": "Inicio de sesión exitoso"
+    }
+  },
+  "errors": {
+    "rate_limited": "Se ha alcanzado el límite de tasa",
+    "route_not_found": "No se encontró la ruta",
+    "bad_request": "La solicitud no era válida."
+  }
+}

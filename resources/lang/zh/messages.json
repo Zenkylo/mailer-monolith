@@ -1,0 +1,14 @@
+{
+  "greeting": "你好，用户!",
+  "auth": {
+    "login": {
+      "title": "登录",
+      "success": "登录成功"
+    }
+  },
+  "errors": {
+    "rate_limited": "请求过于频繁",
+    "route_not_found": "未找到该路由",
+    "bad_request": "请求无效"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "greeting": "こんにちは、ユーザー!",
+  "auth": {
+    "login": {
+      "title": "ログイン",
+      "success": "ログインに成功しました"
+    }
+  },
+  "errors": {
+    "rate_limited": "レート制限に達しました",
+    "route_not_found": "ルートが見つかりません",
+    "bad_request": "不正なリクエストです"
+  }
+}
