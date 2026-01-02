@@ -119,19 +119,14 @@ router.group(() => {
 /**
  * Queue routes /admin/*
  */
-router
-  .group(() => {
-    queueDashUiRoutes().prefix('/queue')
-  })
-  .prefix('/admin')
+router.group(() => {
+  queueDashUiRoutes().prefix('/queue')
+}).prefix('/admin')
 
-  router
-    .get('/403', async ({ inertia }) => {
-      return inertia.render('errors/forbidden')
-    })
-    .use(middleware.silent())
-router
-  .get('/404', async ({ inertia }) => {
-    return inertia.render('errors/not_found')
-  })
-  .use(middleware.silent())
+router.get('/403', async ({ inertia }) => {
+  return inertia.render('errors/forbidden')
+}).use(middleware.silent())
+
+router.get('/404', async ({ inertia }) => {
+  return inertia.render('errors/not_found')
+}).use(middleware.silent())
