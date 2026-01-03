@@ -1,6 +1,7 @@
 import User from '#models/user'
 import PolarSubscription from '#models/polar_subscription'
 import { DateTime } from 'luxon'
+import subscriptionTiersConfig from '#config/subscription_tiers'
 
 export interface SubscriptionTier {
   name: string
@@ -41,63 +42,16 @@ export interface SubscriptionStatus {
 }
 
 export default class PrivilegeService {
-  private static readonly TIERS: Record<string, SubscriptionTier> = {
-    free: {
-      name: 'Free',
-      polarProductIds: [], // No Polar subscription = free tier
-      privileges: {
-        maxSubscriptions: 2,
-        maxEmailsPerDay: 10,
-        canViewEmailHistory: false,
-        maxHistoryDays: 7,
-        canExportData: false,
-        prioritySupport: false,
-        customEndpoints: false,
-        advancedScheduling: false,
-      },
-    },
-    starter: {
-      name: 'Starter',
-      polarProductIds: ['bff1145b-1a39-4385-811b-71a24148b25f'], // Replace with actual Polar product ID
-      privileges: {
-        maxSubscriptions: 10,
-        maxEmailsPerDay: 100,
-        canViewEmailHistory: true,
-        maxHistoryDays: 30,
-        canExportData: false,
-        prioritySupport: false,
-        customEndpoints: true,
-        advancedScheduling: false,
-      },
-    },
-    pro: {
-      name: 'Pro',
-      polarProductIds: ['30da02c2-e96f-4553-a339-284c6d46ab7a'], // Replace with actual Polar product ID
-      privileges: {
-        maxSubscriptions: 50,
-        maxEmailsPerDay: 1000,
-        canViewEmailHistory: true,
-        maxHistoryDays: 365,
-        canExportData: true,
-        prioritySupport: true,
-        customEndpoints: true,
-        advancedScheduling: true,
-      },
-    },
-    // enterprise: {
-    //   name: 'Enterprise',
-    //   polarProductIds: ['enterprise-product-id'], // Replace with actual Polar product ID
-    //   privileges: {
-    //     maxSubscriptions: -1, // Unlimited
-    //     maxEmailsPerDay: -1, // Unlimited
-    //     canViewEmailHistory: true,
-    //     maxHistoryDays: -1, // Unlimited
-    //     canExportData: true,
-    //     prioritySupport: true,
-    //     customEndpoints: true,
-    //     advancedScheduling: true,
-    //   },
-    // },
+  private static tiersCache: Record<string, SubscriptionTier> | null = null
+
+  /**
+   * Get tiers with caching and hot reload support
+   */
+  private static get TIERS(): Record<string, SubscriptionTier> {
+    if (this.tiersCache === null) {
+      this.tiersCache = subscriptionTiersConfig
+    }
+    return this.tiersCache
   }
 
   /**
@@ -349,7 +303,7 @@ export default class PrivilegeService {
   /**
    * Get all available tiers (for pricing pages, etc.)
    */
-  static getAllTiers(): Record<string, SubscriptionTier> {
+  static async getAllTiers(): Promise<Record<string, SubscriptionTier>> {
     return this.TIERS
   }
 
@@ -383,7 +337,7 @@ export default class PrivilegeService {
   /**
    * Get tier details by name
    */
-  static getTier(tierName: string): SubscriptionTier | null {
+  static async getTier(tierName: string): Promise<SubscriptionTier | null> {
     return this.TIERS[tierName] || null
   }
 }

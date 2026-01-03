@@ -60,9 +60,9 @@ export default class PolarService {
       case 'subscription.updated':
         await this.handleSubscriptionUpdated(event as WebhookSubscriptionUpdatedPayload)
         break
-      // case 'subscription.active':
-      //   await this.handleSubscriptionActive(event as WebhookSubscriptionActivePayload)
-      //   break
+      case 'subscription.active':
+        await this.handleSubscriptionActive(event as WebhookSubscriptionActivePayload)
+        break
       case 'subscription.canceled':
         await this.handleSubscriptionCanceled(event as WebhookSubscriptionCanceledPayload)
         break
@@ -76,14 +76,6 @@ export default class PolarService {
         await this.unhandledEvent(event)
         break
     }
-  }
-
-  public async listProducts() {
-    const { result: products } = await this.polar.products.list({
-      page: 1,
-      organizationId: '04bd8f38-ba04-4aea-8f40-5142ab9bf803', // TODO
-    })
-    return products.items
   }
 
   public async createCustomerSession(userNid: string) {
@@ -272,11 +264,11 @@ export default class PolarService {
     await this.updateOrCreatePolarSubscription(subscriptionData, user.id)
   }
 
-  // private async handleSubscriptionActive(event: WebhookSubscriptionActivePayload) {
-  //   const subscriptionData = event.data
-  //   const user = await this.getUserByPolarCustomer(subscriptionData.customer)
-  //   await this.updateOrCreatePolarSubscription(subscriptionData, user.id)
-  // }
+  private async handleSubscriptionActive(event: WebhookSubscriptionActivePayload) {
+    const subscriptionData = event.data
+    const user = await this.getUserByPolarCustomer(subscriptionData.customer)
+    await this.updateOrCreatePolarSubscription(subscriptionData, user.id)
+  }
 
   private async unhandledEvent(event: any) {
     logger.warn('Unhandled event type: %s', event.type)
