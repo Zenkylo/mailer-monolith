@@ -3,10 +3,10 @@
     <div class="mb-6 flex justify-between items-center">
       <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Subscriptions</h1>
       <button
-        @click="showCreateForm = true"
         :disabled="!canCreateMore"
         class="btn btn-primary"
         :class="{ 'opacity-50 cursor-not-allowed': !canCreateMore }"
+        @click="showCreateForm = true"
       >
         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path
@@ -88,8 +88,8 @@
             Create New Subscription
           </h3>
           <button
-            @click="showCreateForm = false"
             class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+            @click="showCreateForm = false"
           >
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
@@ -160,8 +160,8 @@
           <div class="flex justify-end space-x-3">
             <button
               type="button"
-              @click="showCreateForm = false"
               class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+              @click="showCreateForm = false"
             >
               Cancel
             </button>
@@ -200,10 +200,10 @@
         </svg>
         <p class="text-gray-500 dark:text-gray-400 mb-4">No subscriptions yet</p>
         <button
-          @click="showCreateForm = true"
           :disabled="!canCreateMore"
           class="btn btn-primary"
           :class="{ 'opacity-50 cursor-not-allowed': !canCreateMore }"
+          @click="showCreateForm = true"
         >
           Create Your First Subscription
         </button>

@@ -1,6 +1,6 @@
 <template>
   <div class="f fr js ic gap-2">
-    <input type="text" class="input input-sm" v-model="message" placeholder="Message" autofocus />
+    <input v-model="message" type="text" class="input input-sm" placeholder="Message" autofocus />
     <div class="btn btn-primary btn-sm" @click="sendEmail">Send Email</div>
   </div>
 </template>

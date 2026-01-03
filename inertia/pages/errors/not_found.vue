@@ -9,8 +9,8 @@
         <div class="text-warning font-semibold text-4xl text-center">404</div>
       </div>
       <div class="card-body f fr jc ic gap-2">
-        <a href="/dashboard" class="btn" v-if="user">Dashboard</a>
-        <a href="/" class="btn" v-else>Home</a>
+        <a v-if="user" href="/dashboard" class="btn">Dashboard</a>
+        <a v-else href="/" class="btn">Home</a>
       </div>
     </div>
   </div>

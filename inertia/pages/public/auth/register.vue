@@ -2,7 +2,7 @@
   <Head pubtitle="Register" />
 
   <div class="f fr h-screen jc ic bg-base-100">
-    <form @submit.prevent="submit" class="card card-border w-full card-sm max-w-sm w-full">
+    <form class="card card-border w-full card-sm max-w-sm" @submit.prevent="submit">
       <input type="hidden" name="_csrf" :value="csrfToken" />
       <div class="card-body">
         <h2 class="text-lg font-semibold">Register</h2>
@@ -11,12 +11,12 @@
         <div class="f fc gap-2">
           <label for="email" class="label pt-0">Email</label>
           <input
+            v-model="email"
             type="email"
             class="input w-full"
             required
             autofocus
             autocomplete="email"
-            v-model="email"
           />
         </div>
         <p class="text-xs leading-tight px-2 mt-2">
@@ -30,7 +30,7 @@
       <div class="card-body f fr jb ic gap-2">
         <a class="btn" href="/">Cancel</a>
         <button class="btn btn-primary" type="submit">
-          <span class="loading loading-spinner" v-if="loading"></span>
+          <span v-if="loading" class="loading loading-spinner"></span>
           <span v-else> Submit </span>
         </button>
       </div>
@@ -39,7 +39,7 @@
 </template>
 
 <script setup lang="ts">
-import { Head, Link } from '@inertiajs/vue3'
+import { Head } from '@inertiajs/vue3'
 import { ref } from 'vue'
 import layout from '~/layouts/public.vue'
 import { useHttp } from '~/plugins/network_client'

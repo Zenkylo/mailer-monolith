@@ -45,9 +45,9 @@
             <label for="name" class="label"> Name </label>
             <input
               id="name"
+              v-model="subscription.name"
               type="text"
               class="input input-bordered input-sm"
-              v-model="subscription.name"
               placeholder="Name"
             />
           </div>
@@ -57,20 +57,20 @@
             <label for="endpoint" class="label">Endpoint</label>
             <input
               id="endpoint"
+              v-model="subscription.endpoint"
               type="text"
               class="input input-bordered input-sm"
-              v-model="subscription.endpoint"
               placeholder="Endpoint"
             />
           </div>
           <div
             class="btn btn-sm btn-ghost"
-            @click="triggerGetTestResponse"
             :class="{
               'btn-disabled': loadingTestResponse,
             }"
+            @click="triggerGetTestResponse"
           >
-            <span class="loading loading-spinner loading-xs" v-if="loadingTestResponse"></span>
+            <span v-if="loadingTestResponse" class="loading loading-spinner loading-xs"></span>
             Test Endpoint
           </div>
         </div>
@@ -86,7 +86,7 @@
             <div class="">
               <div class="">
                 <Cron
-                  :cronExpression="subscription.cronExpression"
+                  :cron-expression="subscription.cronExpression"
                   @update="subscription.cronExpression = $event"
                 />
               </div>
@@ -95,9 +95,9 @@
               <!-- cron expression -->
               <input
                 id="cron"
+                v-model="subscription.cronExpression"
                 type="text"
                 class="input input-bordered input-sm font-mono"
-                v-model="subscription.cronExpression"
                 placeholder="Cron"
               />
             </div>
@@ -111,12 +111,12 @@
             </div>
             <div
               class="btn btn-ghost btn-sm"
-              @click="triggerGetCronDeliveries"
               :class="{
                 'btn-disabled': loadingDeliveries,
               }"
+              @click="triggerGetCronDeliveries"
             >
-              <span class="loading loading-spinner loading-xs" v-if="loadingDeliveries"></span>
+              <span v-if="loadingDeliveries" class="loading loading-spinner loading-xs"></span>
               Next Deliveries
             </div>
           </div>
@@ -149,9 +149,9 @@
               >
               <input
                 id="enabled"
+                v-model="subscription.enabled"
                 type="checkbox"
                 class="toggle toggle-success toggle-sm"
-                v-model="subscription.enabled"
               />
             </div>
           </label>

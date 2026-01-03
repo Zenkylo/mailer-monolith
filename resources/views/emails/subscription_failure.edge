@@ -2,119 +2,155 @@
 <html>
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ subscription.name }} - Fetch Failed</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-        }
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>
+    {{ subscription.name }} - Fetch Failed
+  </title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+    }
 
-        .header {
-            background-color: #f8d7da;
-            color: #721c24;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            border: 1px solid #f5c6cb;
-        }
+    .header {
+      background-color: #f8d7da;
+      color: #721c24;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      border: 1px solid #f5c6cb;
+    }
 
-        .content {
-            margin-bottom: 20px;
-        }
+    .content {
+      margin-bottom: 20px;
+    }
 
-        .error-section {
-            background-color: #f8d7da;
-            color: #721c24;
-            padding: 15px;
-            border-radius: 5px;
-            margin: 15px 0;
-            border: 1px solid #f5c6cb;
-        }
+    .error-section {
+      background-color: #f8d7da;
+      color: #721c24;
+      padding: 15px;
+      border-radius: 5px;
+      margin: 15px 0;
+      border: 1px solid #f5c6cb;
+    }
 
-        .metadata {
-            font-size: 0.9em;
-            color: #666;
-            border-top: 1px solid #ddd;
-            padding-top: 15px;
-            margin-top: 20px;
-        }
+    .metadata {
+      font-size: 0.9em;
+      color: #666;
+      border-top: 1px solid #ddd;
+      padding-top: 15px;
+      margin-top: 20px;
+    }
 
-        .warning {
-            background-color: #fff3cd;
-            color: #856404;
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid #ffeaa7;
-            margin: 15px 0;
-        }
+    .warning {
+      background-color: #fff3cd;
+      color: #856404;
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #ffeaa7;
+      margin: 15px 0;
+    }
 
-        .error {
-            color: #dc3545;
-        }
+    .error {
+      color: #dc3545;
+    }
 
-        .actions {
-            background-color: #e7f3ff;
-            padding: 15px;
-            border-radius: 5px;
-            margin: 15px 0;
-        }
-    </style>
+    .actions {
+      background-color: #e7f3ff;
+      padding: 15px;
+      border-radius: 5px;
+      margin: 15px 0;
+    }
+  </style>
 </head>
 
 <body>
-    <div class="header">
-        <h1>⚠️ {{ subscription.name }}</h1>
-        <p>We encountered an issue fetching your subscription data</p>
+  <div class="header">
+    <h1>
+      ⚠️ {{ subscription.name }}
+    </h1>
+    <p>
+      We encountered an issue fetching your subscription data
+    </p>
+  </div>
+
+  <div class="content">
+    <h2>
+      What Happened?
+    </h2>
+    <p>
+      We tried to fetch data from your endpoint but encountered an error:
+    </p>
+
+    <div class="error-section">
+      <h3>
+        Error Details:
+      </h3>
+      <pre>
+          {{ error }}
+        </pre>
     </div>
 
-    <div class="content">
-        <h2>What Happened?</h2>
-        <p>We tried to fetch data from your endpoint but encountered an error:</p>
-
-        <div class="error-section">
-            <h3>Error Details:</h3>
-            <pre>{{ error }}</pre>
-        </div>
-
-        @if(subscription.failureCount > 1)
-        <div class="warning">
-            <strong>Multiple Failures:</strong> This subscription has failed {{ subscription.failureCount }} times
-            recently.
-        </div>
-        @endif
-
-        <div class="actions">
-            <h3>What You Can Do:</h3>
-            <ul>
-                <li>Check if your endpoint ({{ subscription.endpoint }}) is accessible</li>
-                <li>Verify your endpoint returns valid JSON data</li>
-                <li>Ensure your server responds within 5 seconds</li>
-                <li>Check your server logs for any errors</li>
-            </ul>
-        </div>
+    @if(subscription.failureCount > 1)
+    <div class="warning">
+      <strong>Multiple Failures:</strong>This subscription has failed {{ subscription.failureCount }} times
+      recently.
     </div>
+    @endif
 
-    <div class="metadata">
-        <h3>Subscription Details</h3>
-        <ul>
-            <li><strong>Subscription Name:</strong> {{ subscription.name }}</li>
-            <li><strong>Endpoint:</strong> {{ subscription.endpoint }}</li>
-            <li><strong>Failed At:</strong> {{ new Date(failedAt).toLocaleString() }}</li>
-            <li><strong>Total Failures:</strong> {{ subscription.failureCount }}</li>
-        </ul>
+    <div class="actions">
+      <h3>
+        What You Can Do:
+      </h3>
+      <ul>
+        <li>
+          Check if your endpoint ({{ subscription.endpoint }}) is accessible
+        </li>
+        <li>
+          Verify your endpoint returns valid JSON data
+        </li>
+        <li>
+          Ensure your server responds within 5 seconds
+        </li>
+        <li>
+          Check your server logs for any errors
+        </li>
+      </ul>
     </div>
+  </div>
 
-    <div class="metadata">
-        <p><small>This email was automatically generated by your subscription service. We will continue to retry
-                fetching your data according to your schedule. To manage your subscriptions, log into your
-                account.</small></p>
-    </div>
+  <div class="metadata">
+    <h3>
+      Subscription Details
+    </h3>
+    <ul>
+      <li>
+        <strong>Subscription Name:</strong>{{ subscription.name }}
+      </li>
+      <li>
+        <strong>Endpoint:</strong>{{ subscription.endpoint }}
+      </li>
+      <li>
+        <strong>Failed At:</strong>{{ new Date(failedAt).toLocaleString() }}
+      </li>
+      <li>
+        <strong>Total Failures:</strong>{{ subscription.failureCount }}
+      </li>
+    </ul>
+  </div>
+
+  <div class="metadata">
+    <p>
+      <small>This email was automatically generated by your subscription service. We will continue to retry
+        fetching your data according to your schedule. To manage your subscriptions, log into your
+        account.</small>
+    </p>
+  </div>
 </body>
 
 </html>

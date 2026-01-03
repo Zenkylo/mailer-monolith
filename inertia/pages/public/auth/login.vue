@@ -4,8 +4,8 @@
     <ThemeChanger />
 
     <form
-      @submit.prevent="submit"
       class="card card-border card-sm max-w-sm w-full outline-2 outline-base-200"
+      @submit.prevent="submit"
     >
       <!-- <div class="card-body fr jb ic gap-2">
         <h1 class="text-lg font-semibold">Hello, do the login...</h1>
@@ -15,10 +15,10 @@
         <div class="f fc gap-2">
           <label for="email" class="label">Email</label>
           <input
-            type="email"
-            class="input w-full"
             id="email"
             v-model="form.email"
+            type="email"
+            class="input w-full"
             required
             autofocus
             autocomplete="email"
@@ -27,10 +27,10 @@
         <div class="f fc gap-2">
           <label for="password" class="label">Password</label>
           <input
-            type="password"
-            class="input w-full"
             id="password"
             v-model="form.password"
+            type="password"
+            class="input w-full"
             required
             autocomplete="current-password"
           />
@@ -39,8 +39,8 @@
       <div class="card-body f fr jb ic gap-2">
         <div class="f fr js ic gap-0">
           <a href="/" class="btn btn-ghost btn-sm">Cancel</a>
-          <Link class="btn btn-ghost btn-sm" href="/auth/forgot-password">Forgot Password?</Link>
-          <Link class="btn btn-ghost btn-sm" href="/auth/register">Register</Link>
+          <Link class="btn btn-ghost btn-sm" href="/auth/forgot-password"> Forgot Password? </Link>
+          <Link class="btn btn-ghost btn-sm" href="/auth/register"> Register </Link>
         </div>
         <button type="submit" class="btn btn-sm btn-primary">Login</button>
       </div>

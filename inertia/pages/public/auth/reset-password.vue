@@ -6,8 +6,8 @@
       <i class="pi pi-times"></i>
     </Link>
     <form
-      @submit.prevent="submit"
       class="card card-border card-sm max-w-sm w-full outline-2 outline-base-200"
+      @submit.prevent="submit"
     >
       <div class="card-body">
         <h1 class="font-semibold text-md">New Password</h1>
@@ -27,9 +27,9 @@
         <div class="f fc gap-2">
           <label for="password" class="label pt-0">Password</label>
           <input
+            v-model="form.password"
             :type="showPasswords ? 'text' : 'password'"
             class="input w-full"
-            v-model="form.password"
             autofocus
             autocomplete="new-password"
             required
@@ -39,9 +39,9 @@
         <div class="f fc gap-2">
           <label for="passwordConfirm" class="label pt-0">Confirm Password</label>
           <input
+            v-model="form.passwordConfirm"
             :type="showPasswords ? 'text' : 'password'"
             class="input w-full"
-            v-model="form.passwordConfirm"
             autocomplete="new-password"
             required
           />
@@ -53,7 +53,7 @@
           <i class="pi" :class="showPasswords ? 'pi-eye' : 'pi-eye-slash'"></i>
         </div>
         <button class="btn btn-success" type="submit" :disabled="!passwordsMatch">
-          <span class="loading loading-spinner" v-if="saving"></span>
+          <span v-if="saving" class="loading loading-spinner"></span>
           <span v-else> Submit </span>
         </button>
       </div>

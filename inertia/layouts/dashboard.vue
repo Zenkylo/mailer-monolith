@@ -49,8 +49,8 @@
               "
             >
               <i :class="item.icon" class="mr-2"></i>
-              {{ item.label }}</Link
-            >
+              {{ item.label }}
+            </Link>
           </li>
         </ul>
 

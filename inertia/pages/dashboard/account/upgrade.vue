@@ -246,8 +246,8 @@
                 canUpgradeTo(key)
                   ? 'bg-blue-600 text-white hover:bg-blue-700'
                   : isDowngradeTo(key)
-                  ? 'bg-orange-600 text-white hover:bg-orange-700'
-                  : 'bg-gray-900 text-white hover:bg-gray-800 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-100'
+                    ? 'bg-orange-600 text-white hover:bg-orange-700'
+                    : 'bg-gray-900 text-white hover:bg-gray-800 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-100'
               "
             >
               {{ getButtonText(key) }}
@@ -282,7 +282,10 @@
         </h3>
         <p class="text-sm text-gray-600 dark:text-gray-400 text-center mb-6 leading-relaxed">
           {{ getModalMessage.message }}
-          <span v-if="getModalMessage.highlight" class="block mt-2 font-medium text-blue-600 dark:text-blue-400">
+          <span
+            v-if="getModalMessage.highlight"
+            class="block mt-2 font-medium text-blue-600 dark:text-blue-400"
+          >
             {{ getModalMessage.highlight }}
           </span>
         </p>
@@ -293,7 +296,12 @@
           >
             Continue to Billing Portal
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5l7 7-7 7"
+              />
             </svg>
           </a>
         </div>
@@ -326,12 +334,11 @@ interface Props {
 
 const props = defineProps<Props>()
 
-
 // Get current user's tier index based on actual tier key (not display name)
 const currentTierIndex = computed(() => {
   if (!props.usage?.tier || !props.tierHierarchy) return -1
   // Find by the actual tier key, not the display name
-  const currentTierKey = props.tierHierarchy.find(tierKey => {
+  const currentTierKey = props.tierHierarchy.find((tierKey) => {
     const tier = props.tiers?.[tierKey]
     return tier?.name?.toLowerCase() === props.usage?.tier?.toLowerCase()
   })
@@ -355,7 +362,7 @@ const isDowngradeTo = (tierKey: string) => {
 // Check if this is the user's current tier
 const isCurrentTier = (tierKey: string) => {
   if (!props.usage?.tier || !props.tierHierarchy) return false
-  const currentTierKey = props.tierHierarchy.find(key => {
+  const currentTierKey = props.tierHierarchy.find((key) => {
     const tier = props.tiers?.[key]
     return tier?.name?.toLowerCase() === props.usage?.tier?.toLowerCase()
   })
@@ -388,14 +395,15 @@ const getModalMessage = computed(() => {
   if (isOnHighestTier.value) {
     return {
       title: 'Manage Your Subscription',
-      message: 'You\'re currently on our highest tier plan. Use the billing portal to manage your subscription or cancel if needed.',
-      highlight: 'You\'re on the highest tier'
+      message:
+        "You're currently on our highest tier plan. Use the billing portal to manage your subscription or cancel if needed.",
+      highlight: "You're on the highest tier",
     }
   }
   return {
-    title: 'Manage Your Subscription', 
+    title: 'Manage Your Subscription',
     message: 'Use the billing portal to upgrade, downgrade, or cancel your subscription.',
-    highlight: null
+    highlight: null,
   }
 })
 </script>

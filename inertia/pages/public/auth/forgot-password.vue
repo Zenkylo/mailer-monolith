@@ -6,8 +6,8 @@
       <i class="pi pi-times"></i>
     </Link>
     <form
-      @submit.prevent="submit"
       class="card card-border card-sm max-w-sm w-full outline-2 outline-base-200"
+      @submit.prevent="submit"
     >
       <div class="card-body">
         <h1 class="font-semibold text-md">Forgot Password</h1>
@@ -15,9 +15,9 @@
       <div class="card-body gap-2 border-y border-base-300">
         <label for="email" class="label pt-0">Email</label>
         <input
+          v-model="email"
           type="email"
           class="input w-full"
-          v-model="email"
           name="email"
           autocomplete="email"
           autofocus
@@ -32,7 +32,7 @@
           type="submit"
           :disabled="!(email && email.length > 5 && email.includes('@') && email.includes('.'))"
         >
-          <span class="loading loading-spinner" v-if="saving"></span>
+          <span v-if="saving" class="loading loading-spinner"></span>
           <span v-else> Submit </span>
         </button>
       </div>
