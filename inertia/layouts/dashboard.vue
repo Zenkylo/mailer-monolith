@@ -120,20 +120,9 @@ const items = ref([
     route: '/dashboard/subscriptions',
   },
   {
-    label: 'Account Settings',
+    label: 'Account',
     icon: 'pi pi-fw pi-user',
     route: '/dashboard/account/settings',
-  },
-  {
-    label: '404 route',
-    icon: 'pi pi-fw pi-times',
-    route: '/dashboard/404',
-  },
-  {
-    label: 'Checkout',
-    icon: 'pi pi-fw pi-shopping-cart',
-    route: '/dashboard/checkout',
-    el: 'a',
   },
   {
     label: 'Logout',
