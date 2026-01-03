@@ -219,3 +219,7 @@
 .navbar {
   @apply min-h-10;
 }
+
+.card-border > .card-body:first-child {
+  @apply border-b border-base-300;
+}
