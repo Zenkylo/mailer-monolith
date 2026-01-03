@@ -30,7 +30,7 @@ export default defineConfig({
     () => import('@adonisjs/lucid/commands'),
     () => import('@nemoventures/adonis-jobs/commands'),
     () => import('@adonisjs/mail/commands'),
-    () => import('@adonisjs/bouncer/commands')
+    () => import('@adonisjs/bouncer/commands'),
   ],
 
   /*
@@ -64,7 +64,7 @@ export default defineConfig({
     () => import('@nemoventures/adonis-jobs/queue_provider'),
     () => import('@adonisjs/redis/redis_provider'),
     () => import('@adonisjs/mail/mail_provider'),
-    () => import('@adonisjs/bouncer/bouncer_provider')
+    () => import('@adonisjs/bouncer/bouncer_provider'),
   ],
 
   /*

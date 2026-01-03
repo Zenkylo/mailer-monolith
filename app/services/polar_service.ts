@@ -29,7 +29,21 @@ export default class PolarService {
     if (!webhookSecret) {
       throw new Error('POLAR_WEBHOOK_SECRET not configured')
     }
-    return validateEvent(rawBody, headers, webhookSecret)
+    if (!rawBody) {
+      throw new Error('Request body is required for webhook validation')
+    }
+
+    // Convert headers to Record<string, string> format expected by validateEvent
+    const stringHeaders: Record<string, string> = {}
+    for (const [key, value] of Object.entries(headers)) {
+      if (typeof value === 'string') {
+        stringHeaders[key] = value
+      } else if (Array.isArray(value)) {
+        stringHeaders[key] = value[0] || ''
+      }
+    }
+
+    return validateEvent(rawBody, stringHeaders, webhookSecret)
   }
 
   public async handleWebhookEvent(event: any) {
@@ -216,7 +230,7 @@ export default class PolarService {
     }
 
     // Update existing subscription - exclude userId and polarId from updates
-    const { userId: _, polarId: __, ...updateData } = modelData
+    const { userId: excludedUserId, polarId: excludedPolarId, ...updateData } = modelData
     Object.assign(polarSub, updateData)
 
     await polarSub.save()
@@ -258,11 +272,11 @@ export default class PolarService {
     await this.updateOrCreatePolarSubscription(subscriptionData, user.id)
   }
 
-  private async handleSubscriptionActive(event: WebhookSubscriptionActivePayload) {
-    const subscriptionData = event.data
-    const user = await this.getUserByPolarCustomer(subscriptionData.customer)
-    await this.updateOrCreatePolarSubscription(subscriptionData, user.id)
-  }
+  // private async handleSubscriptionActive(event: WebhookSubscriptionActivePayload) {
+  //   const subscriptionData = event.data
+  //   const user = await this.getUserByPolarCustomer(subscriptionData.customer)
+  //   await this.updateOrCreatePolarSubscription(subscriptionData, user.id)
+  // }
 
   private async unhandledEvent(event: any) {
     logger.warn('Unhandled event type: %s', event.type)

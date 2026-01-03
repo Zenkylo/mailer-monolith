@@ -5,7 +5,6 @@ import parser from 'cron-parser'
 import { DateTime } from 'luxon'
 import axios from 'axios'
 
-
 export default class SubscriptionsController {
   public async showList({ auth, inertia, bouncer }: HttpContext) {
     const user = auth.user!

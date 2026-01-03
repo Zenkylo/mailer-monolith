@@ -326,14 +326,6 @@ interface Props {
 
 const props = defineProps<Props>()
 
-// Convert tiers object to array sorted by actual tier hierarchy from backend
-const tiersSortedByHierarchy = computed(() => {
-  if (!props.tiers || !props.tierHierarchy) return []
-  
-  return props.tierHierarchy
-    .map(tierKey => ({ key: tierKey, ...props.tiers![tierKey] }))
-    .filter(tier => tier.name) // Only include tiers that exist
-})
 
 // Get current user's tier index based on actual tier key (not display name)
 const currentTierIndex = computed(() => {

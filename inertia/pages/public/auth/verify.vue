@@ -62,7 +62,7 @@
 import { Head } from '@inertiajs/vue3'
 import layout from '~/layouts/public.vue'
 import { reactive, ref, computed } from 'vue'
-import { useHttp } from '~/plugins/NetworkClient'
+import { useHttp } from '~/plugins/network_client'
 import { useAppToast } from '~/composables/toast'
 const http = useHttp()
 const toast = useAppToast()

@@ -4,12 +4,12 @@ import { defineConfig, transports } from '@adonisjs/mail'
 const mailConfig = defineConfig({
   default: 'ses',
 
-   /**
-    * The mailers object can be used to configure multiple mailers
-    * each using a different transport or same transport with different
-    * options.
+  /**
+   * The mailers object can be used to configure multiple mailers
+   * each using a different transport or same transport with different
+   * options.
    */
-  mailers: {  
+  mailers: {
     ses: transports.ses({
       apiVersion: '2010-12-01',
       region: env.get('AWS_REGION'),
@@ -20,7 +20,6 @@ const mailConfig = defineConfig({
       sendingRate: 10,
       maxConnections: 5,
     }),
-		    
   },
 })
 

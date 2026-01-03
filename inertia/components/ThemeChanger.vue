@@ -14,7 +14,7 @@
 
 <script setup lang="ts">
 import { ref, watch } from 'vue'
-import { useLocalStorage } from '~/composables/useLocalStorage'
+import { useLocalStorage } from '~/composables/use_local_storage'
 const { getItem, setItem } = useLocalStorage()
 import { LOCAL_STORAGE_KEYS, AVAILABLE_THEMES } from '~/constants'
 
