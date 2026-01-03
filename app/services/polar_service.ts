@@ -49,15 +49,15 @@ export default class PolarService {
       // case 'subscription.active':
       //   await this.handleSubscriptionActive(event as WebhookSubscriptionActivePayload)
       //   break
-      // case 'subscription.canceled':
-      //   await this.handleSubscriptionCanceled(event as WebhookSubscriptionCanceledPayload)
-      //   break
-      // case 'subscription.uncanceled':
-      //   await this.handleSubscriptionUncanceled(event as WebhookSubscriptionUncanceledPayload)
-      //   break
-      // case 'subscription.revoked':
-      //   await this.handleSubscriptionRevoked(event as WebhookSubscriptionRevokedPayload)
-      //   break
+      case 'subscription.canceled':
+        await this.handleSubscriptionCanceled(event as WebhookSubscriptionCanceledPayload)
+        break
+      case 'subscription.uncanceled':
+        await this.handleSubscriptionUncanceled(event as WebhookSubscriptionUncanceledPayload)
+        break
+      case 'subscription.revoked':
+        await this.handleSubscriptionRevoked(event as WebhookSubscriptionRevokedPayload)
+        break
       default:
         await this.unhandledEvent(event)
         break

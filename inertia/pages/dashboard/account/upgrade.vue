@@ -238,24 +238,26 @@
           </ul>
 
           <div class="text-center">
-            <a
-              v-if="key !== 'free'"
-              :href="`/dashboard/checkout?tier=${key}`"
-              class="w-full inline-block py-2 px-4 rounded-lg font-medium transition-all duration-300 text-center"
+            <button
+              v-if="!isCurrentTier(key)"
+              onclick="upgrade_modal.showModal()"
+              class="w-full py-2 px-4 rounded-lg font-medium transition-all duration-300 text-center"
               :class="
-                key === 'pro'
+                canUpgradeTo(key)
                   ? 'bg-blue-600 text-white hover:bg-blue-700'
+                  : isDowngradeTo(key)
+                  ? 'bg-orange-600 text-white hover:bg-orange-700'
                   : 'bg-gray-900 text-white hover:bg-gray-800 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-100'
               "
             >
-              Upgrade
-            </a>
+              {{ getButtonText(key) }}
+            </button>
             <button
               v-else
               class="w-full py-2 px-4 rounded-lg font-medium bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300 cursor-not-allowed"
               disabled
             >
-              Current Plan
+              {{ getButtonText(key) }}
             </button>
           </div>
         </div>
@@ -271,11 +273,41 @@
         ← Back to Dashboard
       </Link>
     </div>
+
+    <!-- Upgrade Modal -->
+    <dialog id="upgrade_modal" class="modal backdrop-blur-sm">
+      <div class="modal-box max-w-md mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-xl">
+        <h3 class="font-bold text-lg text-gray-900 dark:text-white mb-4 text-center">
+          {{ getModalMessage.title }}
+        </h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400 text-center mb-6 leading-relaxed">
+          {{ getModalMessage.message }}
+          <span v-if="getModalMessage.highlight" class="block mt-2 font-medium text-blue-600 dark:text-blue-400">
+            {{ getModalMessage.highlight }}
+          </span>
+        </p>
+        <div class="flex justify-center">
+          <a
+            href="/dashboard/billing/portal"
+            class="inline-flex items-center gap-2 px-6 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors duration-200"
+          >
+            Continue to Billing Portal
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </a>
+        </div>
+      </div>
+      <form method="dialog" class="modal-backdrop">
+        <button class="cursor-pointer">close</button>
+      </form>
+    </dialog>
   </div>
 </template>
 
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3'
+import { computed } from 'vue'
 import dashboardLayout from '~/layouts/dashboard.vue'
 
 defineOptions({ layout: dashboardLayout })
@@ -289,7 +321,89 @@ interface Props {
     tier: string
   }
   tiers?: Record<string, any>
+  tierHierarchy?: string[]
 }
 
-defineProps<Props>()
+const props = defineProps<Props>()
+
+// Convert tiers object to array sorted by actual tier hierarchy from backend
+const tiersSortedByHierarchy = computed(() => {
+  if (!props.tiers || !props.tierHierarchy) return []
+  
+  return props.tierHierarchy
+    .map(tierKey => ({ key: tierKey, ...props.tiers![tierKey] }))
+    .filter(tier => tier.name) // Only include tiers that exist
+})
+
+// Get current user's tier index based on actual tier key (not display name)
+const currentTierIndex = computed(() => {
+  if (!props.usage?.tier || !props.tierHierarchy) return -1
+  // Find by the actual tier key, not the display name
+  const currentTierKey = props.tierHierarchy.find(tierKey => {
+    const tier = props.tiers?.[tierKey]
+    return tier?.name?.toLowerCase() === props.usage?.tier?.toLowerCase()
+  })
+  return currentTierKey ? props.tierHierarchy.indexOf(currentTierKey) : -1
+})
+
+// Check if user can upgrade to a specific tier
+const canUpgradeTo = (tierKey: string) => {
+  if (!props.tierHierarchy) return false
+  const tierIndex = props.tierHierarchy.indexOf(tierKey)
+  return currentTierIndex.value !== -1 && tierIndex > currentTierIndex.value
+}
+
+// Check if user would be downgrading to a specific tier
+const isDowngradeTo = (tierKey: string) => {
+  if (!props.tierHierarchy) return false
+  const tierIndex = props.tierHierarchy.indexOf(tierKey)
+  return currentTierIndex.value !== -1 && tierIndex < currentTierIndex.value && tierIndex !== -1
+}
+
+// Check if this is the user's current tier
+const isCurrentTier = (tierKey: string) => {
+  if (!props.usage?.tier || !props.tierHierarchy) return false
+  const currentTierKey = props.tierHierarchy.find(key => {
+    const tier = props.tiers?.[key]
+    return tier?.name?.toLowerCase() === props.usage?.tier?.toLowerCase()
+  })
+  return currentTierKey === tierKey
+}
+
+// Check if user is on the highest tier
+const isOnHighestTier = computed(() => {
+  if (currentTierIndex.value === -1 || !props.tierHierarchy) return false
+  return currentTierIndex.value === props.tierHierarchy.length - 1
+})
+
+// Get button text based on tier relationship
+const getButtonText = (tierKey: string) => {
+  if (isCurrentTier(tierKey)) {
+    return 'Current Plan'
+  }
+  if (canUpgradeTo(tierKey)) {
+    return 'Upgrade'
+  }
+  if (isDowngradeTo(tierKey)) {
+    return 'Downgrade'
+  }
+  // Fallback for edge cases
+  return 'Select Plan'
+}
+
+// Get appropriate modal message based on action
+const getModalMessage = computed(() => {
+  if (isOnHighestTier.value) {
+    return {
+      title: 'Manage Your Subscription',
+      message: 'You\'re currently on our highest tier plan. Use the billing portal to manage your subscription or cancel if needed.',
+      highlight: 'You\'re on the highest tier'
+    }
+  }
+  return {
+    title: 'Manage Your Subscription', 
+    message: 'Use the billing portal to upgrade, downgrade, or cancel your subscription.',
+    highlight: null
+  }
+})
 </script>

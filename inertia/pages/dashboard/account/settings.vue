@@ -102,7 +102,7 @@
     <div v-if="privileges" class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6">
       <div class="flex items-center justify-between mb-4">
         <h2 class="text-xl font-semibold text-gray-900 dark:text-white">Plan & Usage</h2>
-        <Link href="/dashboard/account/upgrade" class="btn btn-sm btn-primary"> Upgrade Plan </Link>
+        <Link href="/dashboard/account/upgrade" class="btn btn-sm btn-primary"> Manage Plan </Link>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
@@ -111,6 +111,29 @@
             {{ privileges.tier }}
           </div>
           <div class="text-sm text-gray-500 dark:text-gray-400">Current Plan</div>
+          
+          <!-- Subscription Status Badges -->
+          <div v-if="usage?.subscriptionStatus" class="flex flex-wrap justify-center gap-2 mt-2">
+            <div v-if="usage.subscriptionStatus.isTrialing" class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+              Trial
+            </div>
+            <div v-if="usage.subscriptionStatus.isCancelled" class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">
+              Cancelled
+            </div>
+            <div v-if="usage.subscriptionStatus.isActive" class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+              Active
+            </div>
+          </div>
+          
+          <!-- End dates -->
+          <div v-if="usage?.subscriptionStatus && (usage.subscriptionStatus.trialEndsAt || usage.subscriptionStatus.endsAt)" class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+            <div v-if="usage.subscriptionStatus.isTrialing && usage.subscriptionStatus.trialEndsAt">
+              Trial ends {{ formatDate(usage.subscriptionStatus.trialEndsAt) }}
+            </div>
+            <div v-else-if="usage.subscriptionStatus.isCancelled && usage.subscriptionStatus.endsAt">
+              Ends {{ formatDate(usage.subscriptionStatus.endsAt) }}
+            </div>
+          </div>
         </div>
 
         <div class="text-center">
@@ -321,6 +344,15 @@ interface Props {
       current: number
       limit: number
     }
+    subscriptionStatus?: {
+      isActive: boolean
+      isCancelled: boolean
+      isTrialing: boolean
+      endsAt: string | null
+      cancelledAt: string | null
+      trialEndsAt: string | null
+      status: string
+    } | null
   }
 }
 
@@ -333,4 +365,5 @@ function formatDate(dateString: string): string {
     day: 'numeric',
   })
 }
+
 </script>

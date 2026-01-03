@@ -30,6 +30,16 @@ export interface UserPrivileges {
   isActive: boolean
 }
 
+export interface SubscriptionStatus {
+  isActive: boolean
+  isCancelled: boolean
+  isTrialing: boolean
+  endsAt: DateTime | null
+  cancelledAt: DateTime | null
+  trialEndsAt: DateTime | null
+  status: string
+}
+
 export default class PrivilegeService {
   private static readonly TIERS: Record<string, SubscriptionTier> = {
     free: {
@@ -48,7 +58,7 @@ export default class PrivilegeService {
     },
     starter: {
       name: 'Starter',
-      polarProductIds: ['bff1145b-1a39-4385-811b-71a24148b25fX'], // Replace with actual Polar product ID
+      polarProductIds: ['bff1145b-1a39-4385-811b-71a24148b25f'], // Replace with actual Polar product ID
       privileges: {
         maxSubscriptions: 10,
         maxEmailsPerDay: 100,
@@ -210,14 +220,39 @@ export default class PrivilegeService {
   }
 
   /**
-   * Get usage statistics for the user
+   * Get detailed subscription status for user
    */
+  static async getSubscriptionStatus(user: User): Promise<SubscriptionStatus | null> {
+    const activeSubscription = await this.getActiveSubscription(user)
+
+    if (!activeSubscription) {
+      return null
+    }
+
+    const now = DateTime.now()
+    const isActive = this.isSubscriptionActive(activeSubscription)
+    const isCancelled =
+      activeSubscription.polarCancelAtPeriodEnd || !!activeSubscription.polarCanceledAt
+    const isTrialing = activeSubscription.polarStatus === 'trialing'
+
+    return {
+      isActive,
+      isCancelled,
+      isTrialing,
+      endsAt: activeSubscription.polarEndsAt,
+      cancelledAt: activeSubscription.polarCanceledAt,
+      trialEndsAt: activeSubscription.polarTrialEnd,
+      status: activeSubscription.polarStatus,
+    }
+  }
   static async getUserUsage(user: User): Promise<{
     subscriptions: { current: number; limit: number }
     emailsToday: { current: number; limit: number }
     tier: string
+    subscriptionStatus?: SubscriptionStatus | null
   }> {
     const privileges = await this.getUserPrivileges(user)
+    const subscriptionStatus = await this.getSubscriptionStatus(user)
 
     // Get subscription count
     const subscriptionCount = await user.related('subscriptions').query().count('* as total')
@@ -244,6 +279,7 @@ export default class PrivilegeService {
         limit: privileges.maxEmailsPerDay,
       },
       tier: privileges.tier,
+      subscriptionStatus,
     }
   }
 
@@ -316,6 +352,33 @@ export default class PrivilegeService {
    */
   static getAllTiers(): Record<string, SubscriptionTier> {
     return this.TIERS
+  }
+
+  /**
+   * Get tier hierarchy in order from lowest to highest
+   */
+  static getTierHierarchy(): string[] {
+    // Define the order of tiers from lowest to highest
+    return ['free', 'starter', 'pro'] // Add more tiers here as you expand
+  }
+
+  /**
+   * Get tier with hierarchy position information
+   */
+  static getTiersWithHierarchy(): Record<string, SubscriptionTier & { hierarchyPosition: number }> {
+    const hierarchy = this.getTierHierarchy()
+    const result: Record<string, SubscriptionTier & { hierarchyPosition: number }> = {}
+
+    hierarchy.forEach((tierKey, index) => {
+      if (this.TIERS[tierKey]) {
+        result[tierKey] = {
+          ...this.TIERS[tierKey],
+          hierarchyPosition: index,
+        }
+      }
+    })
+
+    return result
   }
 
   /**

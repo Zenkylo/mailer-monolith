@@ -284,13 +284,15 @@ export default class AccountController {
     const feature = request.input('feature')
 
     const usage = await PrivilegeService.getUserUsage(user)
-    const tiers = PrivilegeService.getAllTiers()
+    const tiers = PrivilegeService.getTiersWithHierarchy()
+    const tierHierarchy = PrivilegeService.getTierHierarchy()
 
     return inertia.render('dashboard/account/upgrade', {
       reason,
       feature,
       usage,
       tiers,
+      tierHierarchy,
     })
   }
 

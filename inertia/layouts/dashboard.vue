@@ -136,11 +136,6 @@ const items = ref([
     el: 'a',
   },
   {
-    label: 'Billing',
-    icon: 'pi pi-fw pi-credit-card',
-    route: '/dashboard/billing',
-  },
-  {
     label: 'Logout',
     icon: 'pi pi-fw pi-sign-out',
     route: '/auth/logout',

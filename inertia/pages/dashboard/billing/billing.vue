@@ -150,10 +150,8 @@
     <!-- Open the modal using ID.showModal() method -->
     <dialog id="my_modal_2" class="modal" v-if="isAlreadySubscribed">
       <div class="modal-box w-96">
-        <p class="pb-4 text-sm text-center">
-          Use the
-          <span class="font-semibold"> "Change Plan" </span>
-          button in the billing portal to change your subscription.
+        <p class="text-sm text-gray-600 dark:text-gray-400 text-center mb-6 leading-relaxed">
+          Use the billing portal to upgrade, downgrade, or manage your subscription.
         </p>
         <a href="/dashboard/billing/portal" class="btn btn-sm gap-1 btn-soft f self-center">
           Continue to Billing Portal

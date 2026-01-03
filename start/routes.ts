@@ -63,10 +63,10 @@ router
     router.get('/subscriptions/:nid', [SubscriptionsController, 'show'])
     
     // Checkout and billing routes
-    router.get('/checkout', [PolarController, 'checkout'])
-    router.get('/checkout/success', [PolarController, 'checkoutSuccess'])
-    router.get('/billing', [PolarController, 'renderBillingPage'])
-    router.get('/billing/checkout/product/:productId', [PolarController, 'checkoutProduct'])
+    // router.get('/checkout', [PolarController, 'checkout'])
+    // router.get('/checkout/success', [PolarController, 'checkoutSuccess'])
+    // router.get('/billing', [PolarController, 'renderBillingPage'])
+    // router.get('/billing/checkout/product/:productId', [PolarController, 'checkoutProduct'])
     router.get('/billing/portal', [PolarController, 'redirectCustomerToBillingPortal'])
     
     // Account routes
