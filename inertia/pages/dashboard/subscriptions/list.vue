@@ -297,8 +297,8 @@
 import { ref, computed } from 'vue'
 import { Link, useForm } from '@inertiajs/vue3'
 import dashboard from '~/layouts/dashboard.vue'
-import { useDateFormat } from '~/composables/useDateFormat'
-import { useHttp } from '~/plugins/NetworkClient'
+import { useDateFormat } from '~/composables/use_date_format'
+import { useHttp } from '~/plugins/network_client'
 import { useAppToast } from '~/composables/toast'
 
 defineOptions({

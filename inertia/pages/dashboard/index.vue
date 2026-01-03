@@ -8,7 +8,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import dashboardLayout from '~/layouts/dashboard.vue'
-import { useHttp } from '~/plugins/NetworkClient'
+import { useHttp } from '~/plugins/network_client'
 import { useAppToast } from '~/composables/toast'
 const toast = useAppToast()
 const http = useHttp()

@@ -10,7 +10,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import { useLocalStorage } from '~/composables/useLocalStorage'
+import { useLocalStorage } from '~/composables/use_local_storage'
 import { LOCAL_STORAGE_KEYS } from '~/constants'
 import ToastProvider from '~/components/ToastProvider.vue'
 import FlashToast from '~/components/FlashToast.vue'

@@ -196,7 +196,7 @@ import { ref } from 'vue'
 import dashboard from '~/layouts/dashboard.vue'
 import Cron from '~/components/Cron.vue'
 import { Link, router } from '@inertiajs/vue3'
-import { useHttp } from '~/plugins/NetworkClient'
+import { useHttp } from '~/plugins/network_client'
 import { debounce, throttle } from 'underscore'
 import { useAppToast } from '~/composables/toast'
 const toast = useAppToast()

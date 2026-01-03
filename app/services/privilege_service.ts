@@ -229,7 +229,6 @@ export default class PrivilegeService {
       return null
     }
 
-    const now = DateTime.now()
     const isActive = this.isSubscriptionActive(activeSubscription)
     const isCancelled =
       activeSubscription.polarCancelAtPeriodEnd || !!activeSubscription.polarCanceledAt

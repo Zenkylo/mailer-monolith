@@ -50,7 +50,7 @@
 
 <script setup>
 import { ref, reactive, computed, onMounted } from 'vue'
-import { useHttp } from '~/plugins/NetworkClient'
+import { useHttp } from '~/plugins/network_client'
 import layout from '~/layouts/public.vue'
 
 import { useAppToast } from '~/composables/toast'
@@ -63,7 +63,7 @@ const search = (event) => {
   items.value = [...Array(10).keys()].map((item) => event.query + '-' + item)
 }
 
-import { useLocalStorage } from '~/composables/useLocalStorage'
+import { useLocalStorage } from '~/composables/use_local_storage'
 import { useI18n } from 'vue-i18n'
 import { Link, router } from '@inertiajs/vue3'
 const http = useHttp()

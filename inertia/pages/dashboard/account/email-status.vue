@@ -165,7 +165,7 @@
 import { ref } from 'vue'
 import { Link } from '@inertiajs/vue3'
 import dashboardLayout from '~/layouts/dashboard.vue'
-import { useHttp } from '~/plugins/NetworkClient'
+import { useHttp } from '~/plugins/network_client'
 import { useAppToast } from '~/composables/toast'
 
 defineOptions({ layout: dashboardLayout })

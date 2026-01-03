@@ -1,7 +1,6 @@
 import type { HttpContext } from '@adonisjs/core/http'
 
 import PolarService from '#services/polar_service'
-import PolarSubscription from '#models/polar_subscription'
 
 export default class PolarController {
   private polarService = new PolarService()

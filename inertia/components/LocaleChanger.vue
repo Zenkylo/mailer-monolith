@@ -8,7 +8,7 @@
 
 <script setup>
 import { watch } from 'vue'
-import { useLocale } from '~/composables/useLocale'
+import { useLocale } from '~/composables/use_locale'
 import { useI18n } from 'vue-i18n'
 const { locale: i18nLocale, availableLocales, t } = useI18n()
 const { locale } = useLocale()
