@@ -16,7 +16,17 @@
     "format:check": "prettier --check \"**/*.{js,ts,vue,json,css,scss,md}\"",
     "code:fix": "npm run lint:fix && npm run format",
     "code:check": "npm run lint:check && npm run format:check",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.{js,ts,vue}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,css,scss,md}": [
+      "prettier --write"
+    ]
   },
   "imports": {
     "#controllers/*": "./app/controllers/*.js",
@@ -51,14 +61,16 @@
     "@types/node": "22.15.18",
     "@types/underscore": "1.13.0",
     "@vitejs/plugin-vue": "5.2.4",
-    "@vue/eslint-config-prettier": "^10.2.0",
+    "@vue/eslint-config-prettier": "10.2.0",
     "daisyui": "5.3.7",
     "eslint": "9.26.0",
-    "eslint-plugin-vue": "^10.6.2",
+    "eslint-plugin-vue": "10.6.2",
     "hot-hook": "0.4.0",
+    "husky": "9.1.7",
+    "lint-staged": "16.2.7",
     "pino-pretty": "13.0.0",
     "prettier": "3.5.3",
-    "prettier-plugin-vue": "^1.1.6",
+    "prettier-plugin-vue": "1.1.6",
     "ts-node-maintained": "10.9.5",
     "typescript": "~5.8.3",
     "vite": "6.3.5"
