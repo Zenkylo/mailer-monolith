@@ -1,15 +1,14 @@
-import type { HttpContext } from '@adonisjs/core/http'
-import User from '#models/user'
 import EmailVerification from '#models/email_verification'
-import EmailService from '#services/email_service'
-import { DateTime } from 'luxon'
 import PasswordResetRequest from '#models/password_reset_request'
+import User from '#models/user'
+import EmailService from '#services/email_service'
+import type { HttpContext } from '@adonisjs/core/http'
+import { DateTime } from 'luxon'
 
 export default class AuthController {
   private readonly emailService = new EmailService()
 
-  showLogin({ inertia, auth, response, request }: HttpContext) {
-    const { csrfToken } = request
+  showLogin({ inertia, auth, response }: HttpContext) {
     if (auth.isAuthenticated) {
       return response.redirect('/dashboard')
     }
@@ -105,7 +104,7 @@ export default class AuthController {
     return inertia.render('public/auth/forgot-password', { csrfToken })
   }
 
-  async showResetPassword({ inertia, auth, logger, params, response, request }: HttpContext) {
+  async showResetPassword({ inertia, logger, params }: HttpContext) {
     logger.info('start:showResetPassword')
     const { token } = params
     const passwordResetRequest = await PasswordResetRequest.query().where('token', token).first()

@@ -1,15 +1,15 @@
+import SendEmailJob from '#jobs/send_email_job'
 import env from '#start/env'
 import { SendEmailData } from '#types/send_email_type'
-import SendEmailJob from '#jobs/send_email_job'
 
 export default class EmailService {
-  private readonly sendNotificationEmailsFrom = env.get('EMAIL_NOREPLY')
+  // private readonly sendNotificationEmailsFrom = env.get('EMAIL_NOREPLY')
   private readonly sendNoReplyEmailsFrom = env.get('EMAIL_NOTIFICATIONS')
   private readonly appUrl = env.get('APP_URL')
 
   async sendTestEmail(to: string, message: string) {
     const subject = 'Test Email'
-    const html = `<p>${message}</p>`
+    // const html = `<p>${message}</p>`
     return this.queueEmail({
       to,
       subject,
