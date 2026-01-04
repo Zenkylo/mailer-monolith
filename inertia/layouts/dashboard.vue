@@ -78,11 +78,11 @@
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3'
 import { onMounted, ref } from 'vue'
+import FlashToast from '~/components/FlashToast.vue'
+import ThemeChanger from '~/components/ThemeChanger.vue'
+import ToastProvider from '~/components/ToastProvider.vue'
 import { useLocalStorage } from '~/composables/use_local_storage'
 import { LOCAL_STORAGE_KEYS } from '~/constants'
-import ToastProvider from '~/components/ToastProvider.vue'
-import ThemeChanger from '~/components/ThemeChanger.vue'
-import FlashToast from '~/components/FlashToast.vue'
 
 const props = defineProps<{
   user?: {

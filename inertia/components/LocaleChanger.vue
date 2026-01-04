@@ -1,6 +1,6 @@
 <template>
   <div class="form-control">
-    <select v-model="i18nLocale" id="language" class="select uppercase">
+    <select id="language" v-model="i18nLocale" class="select uppercase">
       <option v-for="lang in availableLocales" :key="lang" :value="lang">{{ lang }}</option>
     </select>
   </div>

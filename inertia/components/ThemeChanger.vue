@@ -1,13 +1,13 @@
 <template>
   <div
+    v-if="theme === 'mydark'"
     class="w-full"
     variant="outlined"
     @click="toggleDarkMode('mylight')"
-    v-if="theme === 'mydark'"
   >
     <i class="pi pi-sun"></i>
   </div>
-  <div class="w-full" variant="outlined" @click="toggleDarkMode('mydark')" v-else>
+  <div v-else class="w-full" variant="outlined" @click="toggleDarkMode('mydark')">
     <i class="pi pi-moon"></i>
   </div>
 </template>

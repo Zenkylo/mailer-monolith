@@ -33,8 +33,8 @@
 
       <div class="flex-shrink-0">
         <button
-          @click="dismissNotification"
           class="text-yellow-400 hover:text-yellow-500 dark:text-yellow-300 dark:hover:text-yellow-200"
+          @click="dismissNotification"
         >
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path

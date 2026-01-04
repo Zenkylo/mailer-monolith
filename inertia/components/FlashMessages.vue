@@ -10,10 +10,10 @@
         <i :class="getIconClass(String(type))" class="mr-2 text-lg"></i>
         <span class="flex-1">{{ message }}</span>
         <button
-          @click="dismissMessage(String(type))"
           class="btn btn-ghost btn-xs btn-square ml-2 opacity-70 hover:opacity-100"
           type="button"
           :aria-label="`Dismiss ${type} message`"
+          @click="dismissMessage(String(type))"
         >
           <i class="pi pi-times"></i>
         </button>
