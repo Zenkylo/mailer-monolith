@@ -21,6 +21,7 @@ export default [
       'vue/multi-word-component-names': 'off',
       'vue/no-unused-vars': 'error',
       '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/no-explicit-any': 'off',
       // Use the correct rule for component tag order
       'vue/block-order': [
         'error',

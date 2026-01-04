@@ -191,14 +191,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { reactive, ref } from 'vue'
 
-import dashboard from '~/layouts/dashboard.vue'
-import Cron from '~/components/Cron.vue'
 import { Link, router } from '@inertiajs/vue3'
-import { useHttp } from '~/plugins/network_client'
 import { debounce, throttle } from 'underscore'
+import Cron from '~/components/Cron.vue'
 import { useAppToast } from '~/composables/toast'
+import dashboard from '~/layouts/dashboard.vue'
+import { useHttp } from '~/plugins/network_client'
 const toast = useAppToast()
 
 const http = useHttp()
@@ -219,14 +219,16 @@ const props = defineProps<{
   }
 }>()
 
+const subscription = reactive({ ...props.subscription })
+
 async function saveSubscription() {
   try {
-    await http.put(`/subscriptions/${props.subscription.nid}`, {
-      name: props.subscription.name,
-      cron: props.subscription.cronExpression,
-      enabled: props.subscription.enabled,
-      endpoint: props.subscription.endpoint,
-      cronExpression: props.subscription.cronExpression,
+    await http.put(`/subscriptions/${subscription.nid}`, {
+      name: subscription.name,
+      cron: subscription.cronExpression,
+      enabled: subscription.enabled,
+      endpoint: subscription.endpoint,
+      cronExpression: subscription.cronExpression,
     })
     console.log('Subscription updated successfully')
     toast.success('Subscription updated.')
@@ -244,8 +246,8 @@ async function getCronDeliveries() {
   try {
     loadingDeliveries.value = true
     let response = await http.post(`/cron/deliveries`, {
-      cron: props.subscription.cronExpression,
-      timezone: props.subscription.timezone,
+      cron: subscription.cronExpression,
+      timezone: subscription.timezone,
     })
     nextDeliveries.value = response.data
   } catch (error) {
@@ -284,9 +286,9 @@ async function testResponse() {
   toggleTestEndpointModal()
   try {
     await new Promise((resolve) => setTimeout(resolve, 3000))
-    const saveEndpoint = encodeURIComponent(props.subscription.endpoint)
+    const saveEndpoint = encodeURIComponent(subscription.endpoint)
     let response = await http.get(
-      `/subscriptions/${props.subscription.nid}/test?endpoint=${saveEndpoint}`
+      `/subscriptions/${subscription.nid}/test?endpoint=${saveEndpoint}`
     )
     testResponseData.value.status = response.data.status
     testResponseData.value.data = response.data.response

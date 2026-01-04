@@ -10,6 +10,9 @@
 import { Link } from '@inertiajs/vue3'
 
 defineProps({
-  user: Object,
+  user: {
+    type: Object,
+    default: () => ({}),
+  },
 })
 </script>

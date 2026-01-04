@@ -162,11 +162,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
 import { Link } from '@inertiajs/vue3'
+import { ref } from 'vue'
+import { useAppToast } from '~/composables/toast'
 import dashboardLayout from '~/layouts/dashboard.vue'
 import { useHttp } from '~/plugins/network_client'
-import { useAppToast } from '~/composables/toast'
 
 defineOptions({ layout: dashboardLayout })
 
@@ -200,8 +200,11 @@ async function requestReactivation() {
   try {
     const response = await http.post('/dashboard/account/email-reactivation')
     toast.success(response.data.message)
-  } catch (error: any) {
-    const message = error.response?.data?.error || 'Failed to submit reactivation request'
+  } catch (error: unknown) {
+    // TODO type this properly
+    const message =
+      (error as { response?: { data?: { error?: string } } })?.response?.data?.error ||
+      'Failed to submit reactivation request'
     toast.error(message)
   } finally {
     isRequestingReactivation.value = false

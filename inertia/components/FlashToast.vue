@@ -1,9 +1,5 @@
-<template>
-  <!-- This component doesn't render anything visible, it just processes flash messages into toasts -->
-</template>
-
 <script setup lang="ts">
-import { watch, onMounted } from 'vue'
+import { onMounted, watch } from 'vue'
 import { useAppToast } from '~/composables/toast'
 
 interface FlashMessages {

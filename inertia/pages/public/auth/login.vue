@@ -49,9 +49,9 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed, onMounted } from 'vue'
-import { useHttp } from '~/plugins/network_client'
+import { reactive, ref } from 'vue'
 import layout from '~/layouts/public.vue'
+import { useHttp } from '~/plugins/network_client'
 
 import { useAppToast } from '~/composables/toast'
 const toast = useAppToast()
@@ -63,18 +63,22 @@ const search = (event) => {
   items.value = [...Array(10).keys()].map((item) => event.query + '-' + item)
 }
 
-import { useLocalStorage } from '~/composables/use_local_storage'
-import { useI18n } from 'vue-i18n'
 import { Link, router } from '@inertiajs/vue3'
+import { useLocalStorage } from '~/composables/use_local_storage'
 const http = useHttp()
 const { setItem, getItem } = useLocalStorage()
 
 defineOptions({ layout })
 
 const props = defineProps({
-  user: Object,
-  flashMessages: Object,
-  meow: String,
+  user: {
+    type: Object,
+    default: () => ({}),
+  },
+  flashMessages: {
+    type: Object,
+    default: () => ({}),
+  },
 })
 
 const form = reactive({

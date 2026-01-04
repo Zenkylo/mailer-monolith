@@ -9,13 +9,15 @@
 // import '@vue-js-cron/light/dist/light.css'
 // import { CronLight } from '@vue-js-cron/light'
 
-import { ref, onMounted, watch } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 
 const props = defineProps<{
   cronExpression: string
 }>()
 
-const emit = defineEmits()
+const emit = defineEmits<{
+  update: [value: string]
+}>()
 
 const cronEx = ref('0 0 * * *')
 watch(cronEx, (val) => {
