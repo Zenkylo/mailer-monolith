@@ -94,7 +94,7 @@ test.group('CronService - calculateNextRun', () => {
     const result = CronService.calculateNextRun(cronExpression, timezone)
 
     assert.isNotNull(result)
-    assert.instanceOf(result, DateTime)
+    assert.isTrue(result instanceof DateTime)
   })
 
   test('should return null for invalid cron expression', ({ assert }) => {
@@ -109,7 +109,7 @@ test.group('CronService - calculateNextRun', () => {
     const result = CronService.calculateNextRun(cronExpression)
 
     assert.isNotNull(result)
-    assert.instanceOf(result, DateTime)
+    assert.isTrue(result instanceof DateTime)
   })
 
   test('should calculate correct time for weekly cron', ({ assert }) => {
@@ -119,7 +119,7 @@ test.group('CronService - calculateNextRun', () => {
     const result = CronService.calculateNextRun(cronExpression, timezone)
 
     assert.isNotNull(result)
-    assert.instanceOf(result, DateTime)
+    assert.isTrue(result instanceof DateTime)
     assert.equal(result!.hour, 9)
     assert.equal(result!.minute, 0)
     assert.equal(result!.weekday, 1) // Monday
@@ -132,7 +132,7 @@ test.group('CronService - calculateNextRun', () => {
     const result = CronService.calculateNextRun(cronExpression, timezone)
 
     assert.isNotNull(result)
-    assert.instanceOf(result, DateTime)
+    assert.isTrue(result instanceof DateTime)
     assert.equal(result!.hour, 10)
     assert.equal(result!.minute, 0)
     assert.equal(result!.day, 1)
@@ -154,7 +154,7 @@ test.group('CronService - updateNextRunTime', () => {
 
     CronService.updateNextRunTime(subscription).then(() => {
       assert.isNotNull(subscription.nextRunAt)
-      assert.instanceOf(subscription.nextRunAt, DateTime)
+      assert.isTrue(subscription.nextRunAt instanceof DateTime)
       assert.equal(saveCallCount, 1)
     })
   })
@@ -197,7 +197,7 @@ test.group('CronService - markAsRun', () => {
       assert.isTrue(subscription.lastRunAt! >= beforeTime)
       assert.isTrue(subscription.lastRunAt! <= afterTime)
       assert.isNotNull(subscription.nextRunAt)
-      assert.instanceOf(subscription.nextRunAt, DateTime)
+      assert.isTrue(subscription.nextRunAt instanceof DateTime)
       assert.equal(saveCallCount, 1)
     })
   })
@@ -215,7 +215,7 @@ test.group('CronService - markAsRun', () => {
 
     CronService.markAsRun(subscription).then(() => {
       assert.isNotNull(subscription.nextRunAt)
-      assert.instanceOf(subscription.nextRunAt, DateTime)
+      assert.isTrue(subscription.nextRunAt instanceof DateTime)
       assert.equal(saveCallCount, 1)
     })
   })
@@ -294,7 +294,7 @@ test.group('CronService - Cron Expression Validation', () => {
     for (const cronExpression of validExpressions) {
       const result = CronService.calculateNextRun(cronExpression, 'UTC')
       assert.isNotNull(result, `Expected valid result for cron: ${cronExpression}`)
-      assert.instanceOf(result, DateTime)
+      assert.isTrue(result instanceof DateTime)
     }
   })
 
