@@ -35,8 +35,6 @@ export default class FetchSubscriptionDataJob extends Job<
       // Securely fetch data from the user's endpoint
       const result = await SecureDataFetcher.fetchData(subscription.endpoint, {
         timeout: 5000,
-        allowedDomains: SecureDataFetcher.getAllowedDomainsForUser(subscription.user.id),
-        requireHttps: true,
       })
 
       logger.info(`Successfully fetched data for subscription ${subscription.id}`)
