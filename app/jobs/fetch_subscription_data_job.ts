@@ -1,9 +1,9 @@
-import { Job } from '@nemoventures/adonis-jobs'
-import type { BullJobsOptions } from '@nemoventures/adonis-jobs/types'
 import Subscription from '#models/subscription'
 import CronService from '#services/cron_service'
+import SecureDataFetcher from '#services/secure_data_fetcher'
 import logger from '@adonisjs/core/services/logger'
-import axios from 'axios'
+import { Job } from '@nemoventures/adonis-jobs'
+import type { BullJobsOptions } from '@nemoventures/adonis-jobs/types'
 
 export type FetchSubscriptionDataData = {
   subscriptionId: number
@@ -32,13 +32,11 @@ export default class FetchSubscriptionDataJob extends Job<
 
       logger.info(`Fetching data for subscription ${subscription.id} (${subscription.name})`)
 
-      // Fetch data from the user's endpoint
-      const response = await axios.get(subscription.endpoint, {
+      // Securely fetch data from the user's endpoint
+      const result = await SecureDataFetcher.fetchData(subscription.endpoint, {
         timeout: 5000,
-        headers: {
-          'User-Agent': 'SubscriptionService/1.0',
-          'Accept': 'application/json',
-        },
+        allowedDomains: SecureDataFetcher.getAllowedDomainsForUser(subscription.user.id),
+        requireHttps: true,
       })
 
       logger.info(`Successfully fetched data for subscription ${subscription.id}`)
@@ -47,9 +45,9 @@ export default class FetchSubscriptionDataJob extends Job<
       const { default: SendSubscriptionEmailJob } = await import('./send_subscription_email_job.js')
       await SendSubscriptionEmailJob.dispatch({
         subscriptionId: subscription.id,
-        data: response.data,
+        data: result.data,
         fetchedAt: new Date().toISOString(),
-        statusCode: response.status,
+        statusCode: result.status,
       })
 
       // Mark subscription as successfully run
