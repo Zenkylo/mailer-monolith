@@ -1,9 +1,34 @@
-import { DateTime } from 'luxon'
-import parser from 'cron-parser'
 import Subscription from '#models/subscription'
 import logger from '@adonisjs/core/services/logger'
+import parser from 'cron-parser'
+import { DateTime } from 'luxon'
 
 export default class CronService {
+  /**
+   * Validate if a cron expression is potentially valid before parsing
+   */
+  static isValidCronExpression(cronExpression: string): boolean {
+    if (!cronExpression || typeof cronExpression !== 'string') {
+      return false
+    }
+
+    // Basic format validation - should have 5 parts separated by spaces
+    const parts = cronExpression.trim().split(/\s+/)
+    if (parts.length !== 5) {
+      return false
+    }
+
+    // Check each part contains only valid cron characters
+    const validCharsPattern = /^[0-9*,\-\/]+$/
+    for (const part of parts) {
+      if (!validCharsPattern.test(part)) {
+        return false
+      }
+    }
+
+    return true
+  }
+
   /**
    * Check if a subscription is due to run based on its cron expression and last run time
    */
@@ -19,9 +44,17 @@ export default class CronService {
     }
 
     // Fallback: calculate if due based on cron expression
+    if (!this.isValidCronExpression(subscription.cronExpression)) {
+      logger.error(
+        `Invalid cron expression for subscription ${subscription.id}: ${subscription.cronExpression}`
+      )
+      return false
+    }
+
     try {
       const cronExpression = parser.parseExpression(subscription.cronExpression, {
         tz: subscription.timezone || 'UTC',
+        currentDate: subscription.lastRunAt.toJSDate(),
       })
 
       // Get the next scheduled time after the last run
@@ -29,7 +62,7 @@ export default class CronService {
       return DateTime.now() >= DateTime.fromJSDate(nextScheduledTime)
     } catch (error) {
       // Invalid cron expression, don't run
-      console.error(
+      logger.error(
         `Invalid cron expression for subscription ${subscription.id}: ${subscription.cronExpression}`
       )
       return false
@@ -40,11 +73,17 @@ export default class CronService {
    * Calculate the next run time for a subscription based on its cron expression
    */
   static calculateNextRun(cronExpression: string, timezone: string = 'UTC'): DateTime | null {
+    // Pre-validate the expression format
+    if (!this.isValidCronExpression(cronExpression)) {
+      logger.error(`Invalid cron expression format: ${cronExpression}`)
+      return null
+    }
+
     try {
       const expression = parser.parseExpression(cronExpression, { tz: timezone })
       return DateTime.fromJSDate(expression.next().toDate())
     } catch (error) {
-      console.error(`Error calculating next run for cron expression: ${cronExpression}`, error)
+      logger.error(`Error calculating next run for cron expression: ${cronExpression}`, error)
       return null
     }
   }
