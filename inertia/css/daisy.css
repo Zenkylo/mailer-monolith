@@ -223,3 +223,8 @@
 .card-border > .card-body:first-child {
   @apply border-b border-base-300;
 }
+
+/* Modal backdrop - make it less opaque (darker) */
+.modal-backdrop {
+  background-color: oklch(0 0 0 / 0.35) !important;
+}
