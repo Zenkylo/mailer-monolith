@@ -49,94 +49,99 @@
           >
         </div> -->
 
-        <div class="card-body gap-3">
-          <div class="f fc gap-1">
-            <label for="name" class="label"> Name </label>
-            <input
-              id="name"
-              v-model="subscription.name"
-              type="text"
-              class="input input-bordered input-sm w-full"
-              placeholder="Name"
-            />
-          </div>
-
-          <!-- Endpoint -->
-          <div class="f fc gap-1">
-            <label for="endpoint" class="label">Endpoint</label>
-            <input
-              id="endpoint"
-              v-model="subscription.endpoint"
-              type="text"
-              class="input input-bordered input-sm w-full"
-              placeholder="Endpoint"
-            />
-          </div>
-          <div
-            class="btn btn-sm btn-ghost"
-            :class="{
-              'btn-disabled': loadingTestResponse,
-            }"
-            @click="triggerGetTestResponse"
-          >
-            <span v-if="loadingTestResponse" class="loading loading-spinner loading-xs"></span>
-            Test Endpoint
-          </div>
-        </div>
-        <div class="card-body">
-          <div class="ff fc">
-            <h3 class="text-base font-semibold">Delivery</h3>
-            <p class="text-lite !leading-snug">
-              Configure when or how often you'd like this subscription to be triggered. You can
-              provide your own cron expression, or use the form below to generate one.
-            </p>
-          </div>
-          <div class="">
-            <div class="">
-              <div class="">
-                <Cron
-                  :cron-expression="subscription.cronExpression"
-                  @update="subscription.cronExpression = $event"
-                />
-              </div>
-            </div>
-            <div class="form-control">
-              <!-- cron expression -->
+        <div class="card card-border bg-base-100!">
+          <div class="card-body gap-3">
+            <div class="f fc gap-1">
+              <label for="name" class="label"> Name </label>
               <input
-                id="cron"
-                v-model="subscription.cronExpression"
+                id="name"
+                v-model="subscription.name"
                 type="text"
-                class="input input-bordered input-sm font-mono"
-                placeholder="Cron"
+                class="input input-bordered input-sm w-full"
+                placeholder="Name"
               />
             </div>
-          </div>
-          <div class="card-body gap-3 f fr jb is">
-            <div class="f fc gap-0">
-              <h3 class="text-base font-semibold">Next Deliveries</h3>
-              <p class="text-lite !leading-snug">
-                The next scheduled deliveries for this subscription.
-              </p>
+
+            <!-- Endpoint -->
+            <div class="f fc gap-1">
+              <label for="endpoint" class="label">Endpoint</label>
+              <div class="f fr js ic gap-2">
+                <input
+                  id="endpoint"
+                  v-model="subscription.endpoint"
+                  type="text"
+                  class="input input-bordered input-sm w-full"
+                  placeholder="Endpoint"
+                />
+                <div
+                  class="btn btn-sm"
+                  :class="{
+                    'btn-disabled': loadingTestResponse,
+                  }"
+                  @click="triggerGetTestResponse"
+                >
+                  <span
+                    v-if="loadingTestResponse"
+                    class="loading loading-spinner loading-xs"
+                  ></span>
+                  Test
+                </div>
+              </div>
             </div>
-            <div
-              class="btn btn-ghost btn-sm"
-              :class="{
-                'btn-disabled': loadingDeliveries,
-              }"
-              @click="triggerGetCronDeliveries"
-            >
-              <span v-if="loadingDeliveries" class="loading loading-spinner loading-xs"></span>
-              Next Deliveries
-            </div>
-          </div>
-          <div class="card-body">
-            <ul v-if="nextDeliveries.length" class="text-sm text-lite italic">
-              <li v-for="delivery in nextDeliveries" :key="delivery">
-                {{ delivery }}
-              </li>
-            </ul>
           </div>
         </div>
+
+        <div class="card-body">
+          <div class="card card-border bg-base-100!">
+            <div class="card-body border-b-0!">
+              <div class="ff fc">
+                <h3 class="text-base font-semibold">Delivery</h3>
+                <p class="text-lite leading-4">
+                  Configure when or how often you'd like this subscription to be triggered. You can
+                  provide your own cron expression, or use the form below to generate one.
+                </p>
+              </div>
+
+              <CronTabs
+                :cron-expression="subscription.cronExpression"
+                @update="subscription.cronExpression = $event"
+              >
+                <template #cron-builder>
+                  <Cron
+                    :cron-expression="subscription.cronExpression"
+                    @update="subscription.cronExpression = $event"
+                  />
+                </template>
+              </CronTabs>
+              <div class="gap-3 f fr jb is">
+                <div class="f fc gap-0">
+                  <h3 class="text-base font-semibold">Next Deliveries</h3>
+                  <p class="text-lite leading-snugX">
+                    The next scheduled deliveries for this subscription.
+                  </p>
+                </div>
+                <div
+                  class="btn btn-sm"
+                  :class="{
+                    'btn-disabled': loadingDeliveries,
+                  }"
+                  @click="triggerGetCronDeliveries"
+                >
+                  <span v-if="loadingDeliveries" class="loading loading-spinner loading-xs"></span>
+                  Next Deliveries
+                </div>
+              </div>
+              <div class="pt-0">
+                <ul v-if="nextDeliveries.length" class="text-sm text-lite italic">
+                  <li v-for="delivery in nextDeliveries" :key="delivery">
+                    {{ delivery }}
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div class="card-body">
           <label
             for="enabled"
@@ -165,11 +170,11 @@
             </div>
           </label>
 
-          <pre>
+          <!-- <pre>
             <code>
               {{ JSON.stringify(subscription, null, 2) }}
             </code>
-          </pre>
+          </pre> -->
         </div>
         <div class="card-body">
           <div></div>
@@ -205,6 +210,7 @@ import { reactive, ref } from 'vue'
 import { Link, router } from '@inertiajs/vue3'
 import { debounce, throttle } from 'underscore'
 import Cron from '~/components/Cron.vue'
+import CronTabs from '~/components/CronTabs.vue'
 import { useAppToast } from '~/composables/toast'
 import dashboard from '~/layouts/dashboard.vue'
 import { useHttp } from '~/plugins/network_client'
