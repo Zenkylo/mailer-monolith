@@ -13,8 +13,17 @@
       </div>
     </div>
 
-    <div class="card w-full border border-base-300 max-w-4xl">
-      <div class="card-body px-3 py-2">
+    <div class="card w-full border border-base-300 max-w-4xl card-sm">
+      <div class="card-body fr jb ic gap-3 border-b border-base-300">
+        <div class="f fc">
+          <h1 class="font-semibold text-lg">{{ subscription.name }}</h1>
+          <p class="text-sm opacity-70">
+            {{ subscription.endpoint }}
+          </p>
+        </div>
+        <div></div>
+      </div>
+      <div class="card-body">
         <!-- <h2 class="text-lg font-semibold">{{ subscription.name }}</h2>
         <p class="text-sm opacity-70">
           Next email at: {{ localDateTime(subscription.nextRunAt) }}
@@ -40,26 +49,26 @@
           >
         </div> -->
 
-        <div class="card-body gap-4">
-          <div class="form-control">
+        <div class="card-body gap-3">
+          <div class="f fc gap-1">
             <label for="name" class="label"> Name </label>
             <input
               id="name"
               v-model="subscription.name"
               type="text"
-              class="input input-bordered input-sm"
+              class="input input-bordered input-sm w-full"
               placeholder="Name"
             />
           </div>
 
           <!-- Endpoint -->
-          <div class="form-control">
+          <div class="f fc gap-1">
             <label for="endpoint" class="label">Endpoint</label>
             <input
               id="endpoint"
               v-model="subscription.endpoint"
               type="text"
-              class="input input-bordered input-sm"
+              class="input input-bordered input-sm w-full"
               placeholder="Endpoint"
             />
           </div>
