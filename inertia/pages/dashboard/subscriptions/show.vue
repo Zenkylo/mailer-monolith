@@ -24,31 +24,6 @@
         <div></div>
       </div>
       <div class="card-body">
-        <!-- <h2 class="text-lg font-semibold">{{ subscription.name }}</h2>
-        <p class="text-sm opacity-70">
-          Next email at: {{ localDateTime(subscription.nextRunAt) }}
-        </p>
-
-        <div class="f fr js ic gap-2">
-          <input
-            name="enabled"
-            type="checkbox"
-            v-model="subscription.enabled"
-            class="toggle"
-            :class="{
-              'toggle-success': subscription.enabled,
-            }"
-          />
-          <label
-            for="enabled"
-            :class="{
-              'opacity-70': !subscription.enabled,
-            }"
-          >
-            {{ subscription.enabled ? 'Enabled' : 'Disabled' }}</label
-          >
-        </div> -->
-
         <div class="card card-border bg-base-100!">
           <div class="card-body gap-3">
             <div class="f fc gap-1">
@@ -91,58 +66,56 @@
           </div>
         </div>
 
-        <div class="card-body">
-          <div class="card card-border bg-base-100!">
-            <div class="card-body border-b-0!">
-              <div class="ff fc">
-                <h3 class="text-base font-semibold">Delivery</h3>
-                <p class="text-lite leading-4">
-                  Configure when or how often you'd like this subscription to be triggered. You can
-                  provide your own cron expression, or use the form below to generate one.
+        <div class="card card-border bg-base-100!">
+          <div class="card-body border-b-0!">
+            <div class="ff fc">
+              <h3 class="text-base font-semibold">Delivery</h3>
+              <p class="text-lite leading-4">
+                Configure when or how often you'd like this subscription to be triggered. You can
+                provide your own cron expression, or use the form below to generate one.
+              </p>
+            </div>
+
+            <CronTabs
+              :cron-expression="subscription.cronExpression"
+              @update="subscription.cronExpression = $event"
+            >
+              <template #cron-builder>
+                <Cron
+                  :cron-expression="subscription.cronExpression"
+                  @update="subscription.cronExpression = $event"
+                />
+              </template>
+            </CronTabs>
+            <div class="gap-3 f fr jb is">
+              <div class="f fc gap-0">
+                <h3 class="text-base font-semibold">Next Deliveries</h3>
+                <p class="text-lite leading-snugX">
+                  The next scheduled deliveries for this subscription.
                 </p>
               </div>
-
-              <CronTabs
-                :cron-expression="subscription.cronExpression"
-                @update="subscription.cronExpression = $event"
+              <div
+                class="btn btn-sm"
+                :class="{
+                  'btn-disabled': loadingDeliveries,
+                }"
+                @click="triggerGetCronDeliveries"
               >
-                <template #cron-builder>
-                  <Cron
-                    :cron-expression="subscription.cronExpression"
-                    @update="subscription.cronExpression = $event"
-                  />
-                </template>
-              </CronTabs>
-              <div class="gap-3 f fr jb is">
-                <div class="f fc gap-0">
-                  <h3 class="text-base font-semibold">Next Deliveries</h3>
-                  <p class="text-lite leading-snugX">
-                    The next scheduled deliveries for this subscription.
-                  </p>
-                </div>
-                <div
-                  class="btn btn-sm"
-                  :class="{
-                    'btn-disabled': loadingDeliveries,
-                  }"
-                  @click="triggerGetCronDeliveries"
-                >
-                  <span v-if="loadingDeliveries" class="loading loading-spinner loading-xs"></span>
-                  Next Deliveries
-                </div>
+                <span v-if="loadingDeliveries" class="loading loading-spinner loading-xs"></span>
+                Next Deliveries
               </div>
-              <div class="pt-0">
-                <ul v-if="nextDeliveries.length" class="text-sm text-lite italic">
-                  <li v-for="delivery in nextDeliveries" :key="delivery">
-                    {{ delivery }}
-                  </li>
-                </ul>
-              </div>
+            </div>
+            <div class="pt-0">
+              <ul v-if="nextDeliveries.length" class="text-sm text-lite italic">
+                <li v-for="delivery in nextDeliveries" :key="delivery">
+                  {{ delivery }}
+                </li>
+              </ul>
             </div>
           </div>
         </div>
 
-        <div class="card-body">
+        <div class="">
           <label
             for="enabled"
             class="card card-sm text-base cursor-pointer"
@@ -153,37 +126,52 @@
             }"
           >
             <div class="card-body f fr js ic gap-2 w-full">
-              <span
-                class="label py-0 pr-0 text-sm"
-                :class="{
-                  'text-success': subscription.enabled,
-                  'opacity-70': !subscription.enabled,
-                }"
-                >Enabled</span
-              >
-              <input
-                id="enabled"
-                v-model="subscription.enabled"
-                type="checkbox"
-                class="toggle toggle-success toggle-sm"
-              />
+              <div class="f fc">
+                <div class="f fr js ic gap-2">
+                  <span
+                    class="py-0 pr-0 text-base font-semibold"
+                    :class="{
+                      'text-success': subscription.enabled,
+                      'opacity-70': !subscription.enabled,
+                    }"
+                    >Enabled</span
+                  >
+                  <input
+                    id="enabled"
+                    v-model="subscription.enabled"
+                    type="checkbox"
+                    class="toggle toggle-success toggle-sm"
+                  />
+                </div>
+                <p
+                  class="test-sm"
+                  :class="{
+                    'text-success': subscription.enabled,
+                    'opacity-70': !subscription.enabled,
+                  }"
+                >
+                  Disabled subscriptions will not send any emails.
+                </p>
+              </div>
             </div>
           </label>
-
-          <!-- <pre>
-            <code>
-              {{ JSON.stringify(subscription, null, 2) }}
-            </code>
-          </pre> -->
         </div>
-        <div class="card-body">
-          <div></div>
-          <div class="btn btn-primary btn-sm" @click="saveSubscription">Save</div>
-        </div>
+      </div>
+      <div class="card-body border-t border-base-300">
+        <div></div>
+        <div class="btn btn-primary btn-sm" @click="saveSubscription">Save</div>
       </div>
     </div>
 
-    <!-- Test Endpoint Modal (sidebar) -->
+    <!-- <div class="card card-sm card-border max-w-3xl">
+      <div class="card-body">
+        <pre>
+          <code>
+            {{ JSON.stringify(subscription, null, 2) }}
+          </code>
+        </pre>
+      </div>
+    </div> -->
 
     <!-- Open the modal using ID.showModal() method -->
     <dialog id="test-endpoint-modal" class="modal">
