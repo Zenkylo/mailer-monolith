@@ -10,6 +10,17 @@
     "rate_limited": "Limite de taux dépassée. Veuillez réessayer plus tard. { limit } demandes autorisées, { remaining } restantes. Réessayez dans { availableIn } secondes.",
     "route_not_found": "La route demandée n'a pas été trouvée.",
     "bad_request": "La demande était invalide.",
-    "unauthorized": "Vous n'êtes pas autorisé à effectuer cette action!"
+    "unauthorized": "Vous n'êtes pas autorisé à effectuer cette action!",
+    "secure_data_fetcher": {
+      "invalid_url_format": "Format d'URL invalide",
+      "https_required": "URL invalide : HTTPS est requis",
+      "port_443_required": "URL invalide : seul HTTPS sur le port 443 est autorisé",
+      "hostname_not_allowed": "URL invalide : le nom d'hôte n'est pas autorisé",
+      "invalid_domain_structure": "URL invalide : le nom d'hôte doit avoir une structure de domaine valide",
+      "blocked_hostname": "URL invalide : le nom d'hôte {{ hostname }} n'est pas autorisé",
+      "url_too_long": "URL invalide : l'URL est trop longue",
+      "invalid_content_type": "Type de contenu invalide : {{ contentType }}. Seules les réponses JSON sont autorisées.",
+      "request_failed": "Demande échouée : {{ error }} ({{ code }})"
+    }
   }
 }

@@ -9,6 +9,18 @@
   "errors": {
     "rate_limited": "Se ha alcanzado el límite de tasa",
     "route_not_found": "No se encontró la ruta",
-    "bad_request": "La solicitud no era válida."
+    "bad_request": "La solicitud no era válida.",
+    "unauthorized": "No estás autorizado para realizar esta acción.",
+    "secure_data_fetcher": {
+      "invalid_url_format": "Formato de URL inválido",
+      "https_required": "URL inválida: HTTPS es requerido",
+      "port_443_required": "URL inválida: solo HTTPS en el puerto 443 está permitido",
+      "hostname_not_allowed": "URL inválida: el hostname no está permitido",
+      "invalid_domain_structure": "URL inválida: el hostname debe tener una estructura de dominio válida",
+      "blocked_hostname": "URL inválida: el hostname {{ hostname }} no está permitido",
+      "url_too_long": "URL inválida: la URL es demasiado larga",
+      "invalid_content_type": "Tipo de contenido inválido: {{ contentType }}. Solo se permiten respuestas JSON.",
+      "request_failed": "Solicitud fallida: {{ error }} ({{ code }})"
+    }
   }
 }

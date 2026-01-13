@@ -16,6 +16,17 @@
     "rate_limited": "Rate limit exceeded. Please try again later. { limit } requests allowed, { remaining } remaining. Try again in { availableIn } seconds.",
     "route_not_found": "The requested route was not found.",
     "bad_request": "The request was invalid.",
-    "unauthorized": "You are not authorized to perform this action."
+    "unauthorized": "You are not authorized to perform this action.",
+    "secure_data_fetcher": {
+      "invalid_url_format": "Invalid URL format",
+      "https_required": "Invalid URL: HTTPS is required",
+      "port_443_required": "Invalid URL: only HTTPS on port 443 is allowed",
+      "hostname_not_allowed": "Invalid URL: hostname is not allowed",
+      "invalid_domain_structure": "Invalid URL: hostname must have a valid domain structure",
+      "blocked_hostname": "Invalid URL: hostname {{ hostname }} is not allowed",
+      "url_too_long": "Invalid URL: URL is too long",
+      "invalid_content_type": "Invalid content type: {{ contentType }}. Only JSON responses are allowed.",
+      "request_failed": "Request failed: {{ error }} ({{ code }})"
+    }
   }
 }

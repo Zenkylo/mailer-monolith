@@ -9,6 +9,18 @@
   "errors": {
     "rate_limited": "请求过于频繁",
     "route_not_found": "未找到该路由",
-    "bad_request": "请求无效"
+    "bad_request": "请求无效",
+    "unauthorized": "您没有权限执行此操作。",
+    "secure_data_fetcher": {
+      "invalid_url_format": "无效的URL格式",
+      "https_required": "无效的URL：需要HTTPS",
+      "port_443_required": "无效的URL：只允许端口443上的HTTPS",
+      "hostname_not_allowed": "无效的URL：不允许该主机名",
+      "invalid_domain_structure": "无效的URL：主机名必须具有有效的域结构",
+      "blocked_hostname": "无效的URL：不允许主机名 {{ hostname }}",
+      "url_too_long": "无效的URL：URL太长",
+      "invalid_content_type": "无效的内容类型：{{ contentType }}。只允许JSON响应。",
+      "request_failed": "请求失败：{{ error }} ({{ code }})"
+    }
   }
 }

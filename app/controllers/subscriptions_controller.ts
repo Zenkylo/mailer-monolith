@@ -1,9 +1,9 @@
-import type { HttpContext } from '@adonisjs/core/http'
-import User from '#models/user'
 import Subscription from '#models/subscription'
+import User from '#models/user'
+import SecureDataFetcher from '#services/secure_data_fetcher'
+import type { HttpContext } from '@adonisjs/core/http'
 import parser from 'cron-parser'
 import { DateTime } from 'luxon'
-import axios from 'axios'
 
 export default class SubscriptionsController {
   public async showList({ auth, inertia, bouncer }: HttpContext) {
@@ -100,7 +100,13 @@ export default class SubscriptionsController {
     }
   }
 
-  public async clientTestSubscriptionEndpoint({ params, request, response, auth }: HttpContext) {
+  public async clientTestSubscriptionEndpoint({
+    params,
+    request,
+    response,
+    auth,
+    i18n,
+  }: HttpContext) {
     const { nid } = params
     const { endpoint } = request.qs()
 
@@ -110,12 +116,24 @@ export default class SubscriptionsController {
     await Subscription.query().where('user_id', userId).andWhere('nid', nid).firstOrFail()
 
     try {
-      const res = await axios.get(endpoint, {
-        timeout: 5000,
+      const result = await SecureDataFetcher.fetchData(
+        endpoint,
+        {
+          timeout: 5000,
+        },
+        {
+          i18n,
+          user,
+          requestId: request.id?.(),
+        }
+      )
+      return response.ok({
+        status: 'success',
+        response: result.data,
+        fetchStatus: result.status,
       })
-      return response.ok({ status: 'success', response: res.data })
     } catch (error) {
-      return response.badRequest({ status: 'error', message: error.message })
+      return response.badRequest({ status: 'error', error: error.message })
     }
   }
 

@@ -1,3 +1,5 @@
+import TranslationService from '#services/translation_service'
+import { ServiceContext, TRANSLATION_KEYS } from '#types/translation_types'
 import logger from '@adonisjs/core/services/logger'
 import axios, { AxiosResponse } from 'axios'
 
@@ -33,13 +35,17 @@ export default class SecureDataFetcher {
   /**
    * Safely fetch data from a user-provided endpoint with security validations
    */
-  static async fetchData(url: string, options: FetchOptions = {}): Promise<FetchResult> {
+  static async fetchData(
+    url: string,
+    options: FetchOptions = {},
+    context?: ServiceContext
+  ): Promise<FetchResult> {
     const config = { ...this.DEFAULT_OPTIONS, ...options }
 
     // Validate the URL
-    this.validateUrl(url)
+    this.validateUrl(url, context)
 
-    logger.info(`Secure fetch request to: ${url}`)
+    logger.info(`Secure fetch request to: ${url}`, { requestId: context?.requestId })
 
     try {
       const response: AxiosResponse = await axios.get(url, {
@@ -58,10 +64,17 @@ export default class SecureDataFetcher {
       // Validate response content type
       const contentType = response.headers['content-type'] || ''
       if (!contentType.includes('application/json')) {
-        throw new Error(`Invalid content type: ${contentType}. Only JSON responses are allowed.`)
+        throw TranslationService.createError(
+          context,
+          TRANSLATION_KEYS.SECURE_DATA_FETCHER.INVALID_CONTENT_TYPE,
+          `Invalid content type: ${contentType}. Only JSON responses are allowed.`,
+          { contentType }
+        )
       }
 
-      logger.info(`Secure fetch successful: ${url} (${response.status})`)
+      logger.info(`Secure fetch successful: ${url} (${response.status})`, {
+        requestId: context?.requestId,
+      })
 
       return {
         data: response.data,
@@ -73,10 +86,16 @@ export default class SecureDataFetcher {
       logger.error(`Secure fetch failed for ${url}`, {
         error: error.message,
         code: error.code,
+        requestId: context?.requestId,
       })
 
       if (axios.isAxiosError(error)) {
-        throw new Error(`Request failed: ${error.message} (${error.code || 'UNKNOWN'})`)
+        throw TranslationService.createError(
+          context,
+          TRANSLATION_KEYS.SECURE_DATA_FETCHER.REQUEST_FAILED,
+          `Request failed: ${error.message} (${error.code || 'UNKNOWN'})`,
+          { error: error.message, code: error.code || 'UNKNOWN' }
+        )
       }
 
       throw error
@@ -86,24 +105,36 @@ export default class SecureDataFetcher {
   /**
    * Validate URL for security issues
    */
-  private static validateUrl(url: string): void {
+  private static validateUrl(url: string, context?: ServiceContext): void {
     let parsed: URL
 
     try {
       parsed = new URL(url)
     } catch {
-      throw new Error('Invalid URL format')
+      TranslationService.throwError(
+        context,
+        TRANSLATION_KEYS.SECURE_DATA_FETCHER.INVALID_URL_FORMAT,
+        'Invalid URL format'
+      )
     }
 
     // Only allow HTTPS
     if (parsed.protocol !== 'https:') {
-      throw new Error('Invalid URL: HTTPS is required')
+      TranslationService.throwError(
+        context,
+        TRANSLATION_KEYS.SECURE_DATA_FETCHER.HTTPS_REQUIRED,
+        'Invalid URL: HTTPS is required'
+      )
     }
 
     // Only allow port 443 (default HTTPS port)
     const port = parsed.port || '443'
     if (port !== '443') {
-      throw new Error('Invalid URL: only HTTPS on port 443 is allowed')
+      TranslationService.throwError(
+        context,
+        TRANSLATION_KEYS.SECURE_DATA_FETCHER.PORT_443_REQUIRED,
+        'Invalid URL: only HTTPS on port 443 is allowed'
+      )
     }
 
     // Hostname validation - check blocked hostnames
@@ -111,22 +142,39 @@ export default class SecureDataFetcher {
 
     // Check for empty hostname
     if (!hostname || hostname.trim() === '') {
-      throw new Error('Invalid URL: hostname is not allowed')
+      TranslationService.throwError(
+        context,
+        TRANSLATION_KEYS.SECURE_DATA_FETCHER.HOSTNAME_NOT_ALLOWED,
+        'Invalid URL: hostname is not allowed'
+      )
     }
 
     // Check if hostname has a proper domain structure (must contain at least one dot and have a TLD)
     const domainParts = hostname.split('.')
     if (domainParts.length < 2 || domainParts.some((part) => part === '')) {
-      throw new Error('Invalid URL: hostname must have a valid domain structure')
+      TranslationService.throwError(
+        context,
+        TRANSLATION_KEYS.SECURE_DATA_FETCHER.INVALID_DOMAIN_STRUCTURE,
+        'Invalid URL: hostname must have a valid domain structure'
+      )
     }
 
     if (this.BLOCKED_HOSTNAMES.includes(hostname)) {
-      throw new Error('Invalid URL: hostname is not allowed')
+      TranslationService.throwError(
+        context,
+        TRANSLATION_KEYS.SECURE_DATA_FETCHER.BLOCKED_HOSTNAME,
+        `Invalid URL: hostname ${hostname} is not allowed`,
+        { hostname }
+      )
     }
 
     // URL length validation
     if (url.length > 2000) {
-      throw new Error('Invalid URL: URL is too long')
+      TranslationService.throwError(
+        context,
+        TRANSLATION_KEYS.SECURE_DATA_FETCHER.URL_TOO_LONG,
+        'Invalid URL: URL is too long'
+      )
     }
   }
 

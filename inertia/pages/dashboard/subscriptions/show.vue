@@ -177,7 +177,7 @@
     <dialog id="test-endpoint-modal" class="modal">
       <div class="modal-box">
         <p>
-          <span class="loading loading-spinner loading-xs"></span>
+          <span v-if="loadingTestResponse" class="loading loading-spinner loading-xs"></span>
           Testing endpoint: <strong>{{ subscription.endpoint }}...</strong>
         </p>
 

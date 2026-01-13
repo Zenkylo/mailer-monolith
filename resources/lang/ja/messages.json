@@ -9,6 +9,18 @@
   "errors": {
     "rate_limited": "レート制限に達しました",
     "route_not_found": "ルートが見つかりません",
-    "bad_request": "不正なリクエストです"
+    "bad_request": "不正なリクエストです",
+    "unauthorized": "この操作を実行する権限がありません。",
+    "secure_data_fetcher": {
+      "invalid_url_format": "無効なURL形式",
+      "https_required": "無効なURL: HTTPSが必要です",
+      "port_443_required": "無効なURL: ポート443でのHTTPSのみ許可されています",
+      "hostname_not_allowed": "無効なURL: ホスト名は許可されていません",
+      "invalid_domain_structure": "無効なURL: ホスト名は有効なドメイン構造である必要があります",
+      "blocked_hostname": "無効なURL: ホスト名 {{ hostname }} は許可されていません",
+      "url_too_long": "無効なURL: URLが長すぎます",
+      "invalid_content_type": "無効なコンテンツタイプ: {{ contentType }}。JSON応答のみ許可されています。",
+      "request_failed": "リクエストが失敗しました: {{ error }} ({{ code }})"
+    }
   }
 }
