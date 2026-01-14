@@ -7,9 +7,9 @@
 |
 */
 
-import router from '@adonisjs/core/services/router'
-import { loginThrottle, testSubscriptionEndpointThrottle } from '#start/limiter'
 import { middleware } from '#start/kernel'
+import { loginThrottle, testSubscriptionEndpointThrottle } from '#start/limiter'
+import router from '@adonisjs/core/services/router'
 const AuthController = () => import('#controllers/auth_controller')
 const SubscriptionsController = () => import('#controllers/subscriptions_controller')
 const PolarController = () => import('#controllers/polar_controller')
@@ -17,6 +17,13 @@ const AccountController = () => import('#controllers/account_controller')
 const SesWebhooksController = () => import('#controllers/webhooks/ses_webhooks_controller')
 
 import { queueDashUiRoutes } from '@nemoventures/adonis-jobs/ui/queuedash'
+
+/**
+ * Health check endpoint for Docker
+ */
+router.get('/health', async ({ response }) => {
+  return response.ok({ status: 'ok', timestamp: new Date().toISOString() })
+})
 
 /**
  * Public routes /*
