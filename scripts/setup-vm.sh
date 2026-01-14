@@ -1,23 +1,10 @@
 #!/bin/bash
-# Generic DigitalOcean Droplet Setup Script for Docker Infrastructure
-# Run this once on a fresh Ubuntu droplet
+# Generic VM Setup Script for Docker Infrastructure
+# This has been tested on a Ubuntu 20 VM.
 
 set -e
 
-# Configuration
-APP_NAME="${1:-myapp}"
-COMPOSE_URL="${2:-}"
-APP_DIR="/opt/${APP_NAME}"
-
-if [ -z "$COMPOSE_URL" ]; then
-    echo "❌ Usage: $0 <app-name> <docker-compose-url>"
-    echo "   Example: $0 myapp https://example.com/docker-compose.yml"
-    exit 1
-fi
-
-echo "🐧 Setting up DigitalOcean droplet for Docker infrastructure deployment..."
-echo "📦 App name: $APP_NAME"
-echo "🔗 Compose URL: $COMPOSE_URL"
+echo "🐧 Setting up VM for Docker infrastructure deployment..."
 
 # Update system
 echo "📦 Updating system packages..."
@@ -48,33 +35,21 @@ echo "🐳 Installing Docker Compose..."
 sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 sudo chmod +x /usr/local/bin/docker-compose
 
+# Install NVM and Node.js
+echo "📦 Installing NVM and Node.js..."
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+nvm install 22
+nvm use 22
+nvm alias default 22
+
 # Create application directories
 echo "📁 Creating application directories..."
-sudo mkdir -p "$APP_DIR"
+sudo mkdir -p "/opt/app"
 sudo mkdir -p /opt/backups
-sudo chown -R $USER:$USER "$APP_DIR" /opt/backups
-
-# Download docker-compose.yml
-echo "📥 Downloading docker-compose.yml..."
-cd "$APP_DIR"
-wget -O docker-compose.yml "$COMPOSE_URL"
-
-# Create basic .env template
-echo "📝 Creating .env template..."
-tee .env.example > /dev/null <<EOF
-# Database Configuration
-DB_PASSWORD=your_secure_database_password_here
-REDIS_PASSWORD=your_secure_redis_password_here
-
-# Add your other environment variables here
-APP_KEY=your_32_character_app_key_here
-APP_URL=https://your-domain.com
-
-# Email/AWS SES (if needed)
-AWS_ACCESS_KEY_ID=
-AWS_SECRET_ACCESS_KEY=
-AWS_REGION=us-east-1
-EOF
+sudo chown -R $USER:$USER "/opt/app" /opt/backups
 
 # Configure firewall
 echo "🔥 Configuring UFW firewall..."
@@ -87,16 +62,16 @@ sudo ufw --force enable
 
 # Create systemd service for automatic startup
 echo "🚀 Creating systemd service..."
-sudo tee "/etc/systemd/system/${APP_NAME}.service" > /dev/null <<EOF
+sudo tee "/etc/systemd/system/docker-app.service" > /dev/null <<EOF
 [Unit]
-Description=${APP_NAME} Infrastructure Services
+Description=Docker Infrastructure Services
 Requires=docker.service
 After=docker.service
 
 [Service]
 Type=oneshot
 RemainAfterExit=yes
-WorkingDirectory=${APP_DIR}
+WorkingDirectory=/opt/app
 ExecStart=/usr/local/bin/docker-compose up -d
 ExecStop=/usr/local/bin/docker-compose down
 TimeoutStartSec=0
@@ -105,7 +80,7 @@ TimeoutStartSec=0
 WantedBy=multi-user.target
 EOF
 
-sudo systemctl enable "${APP_NAME}.service"
+sudo systemctl enable "docker-app.service"
 
 # Install monitoring tools
 echo "📊 Installing monitoring tools..."
@@ -140,19 +115,6 @@ echo "🎯 Final setup..."
 sudo systemctl restart docker
 
 echo ""
-echo "✅ DigitalOcean droplet setup complete!"
-echo ""
-echo "📋 Next steps:"
-echo "1. Log out and log back in to apply Docker group membership"
-echo "2. Copy .env.example to .env and configure your environment variables:"
-echo "   cd $APP_DIR && cp .env.example .env && nano .env"
-echo "3. Start your infrastructure services:"
-echo "   cd $APP_DIR && docker-compose up -d"
-echo "4. Deploy your application separately (outside Docker)"
-echo ""
-echo "🔧 Useful commands:"
-echo "- Check status: systemctl status ${APP_NAME}"
-echo "- View logs: cd $APP_DIR && docker-compose logs -f"
-echo "- Stop services: cd $APP_DIR && docker-compose down"
-echo "- Update compose file: cd $APP_DIR && wget -O docker-compose.yml $COMPOSE_URL"
+echo "✅ VM setup complete!"
+echo "Refer to DEPLOYMENT.md for next steps."
 echo ""
