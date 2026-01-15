@@ -12,6 +12,19 @@
       "success": "Looks good. Check your email for a verification link."
     }
   },
+  "subscriptions": {
+    "create": {
+      "title": "Create Subscription",
+      "name_label": "Subscription Name",
+      "endpoint_label": "Endpoint URL",
+      "cron_expression_label": "Cron Expression",
+      "submit_button": "Create Subscription",
+      "success_message": "Subscription created successfully"
+    },
+    "errors": {
+      "creation_failed": "Failed to create subscription. Please try again."
+    }
+  },
   "errors": {
     "rate_limited": "Rate limit exceeded. Please try again later. { limit } requests allowed, { remaining } remaining. Try again in { availableIn } seconds.",
     "route_not_found": "The requested route was not found.",

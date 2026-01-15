@@ -40,6 +40,15 @@ export const TRANSLATION_KEYS = {
     BAD_REQUEST: 'messages.errors.bad_request',
     ROUTE_NOT_FOUND: 'messages.errors.route_not_found',
   },
+
+  SUBSCRIPTIONS: {
+    CREATE: {
+      SUCCESS_MESSAGE: 'messages.subscriptions.create.success_message',
+      ERRORS: {
+        CREATION_FAILED: 'messages.subscriptions.errors.creation_failed',
+      },
+    },
+  },
 } as const
 
 // Type for all possible translation keys (flattened from TRANSLATION_KEYS)

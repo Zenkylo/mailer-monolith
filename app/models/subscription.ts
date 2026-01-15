@@ -1,18 +1,18 @@
-import { DateTime } from 'luxon'
+import SubscriptionResponse from '#models/subscription_response'
+import User from '#models/user'
 import {
   BaseModel,
-  column,
-  belongsTo,
   beforeCreate,
   beforeSave,
+  belongsTo,
+  column,
   computed,
   hasMany,
 } from '@adonisjs/lucid/orm'
 import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations'
-import { nanoid } from 'nanoid'
-import User from '#models/user'
 import parser from 'cron-parser'
-import SubscriptionResponse from '#models/subscription_response'
+import { DateTime } from 'luxon'
+import { nanoid } from 'nanoid'
 export default class Subscription extends BaseModel {
   @column({ isPrimary: true })
   declare id: number

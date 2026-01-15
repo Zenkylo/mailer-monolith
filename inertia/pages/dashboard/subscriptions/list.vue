@@ -101,25 +101,6 @@
               placeholder="https://example.com/webhook"
             />
           </div>
-
-          <!-- <div class="f fc gap-2">
-                  <label for="cron" class="label">
-                    <span class="label-text">Cron Expression</span>
-                  </label>
-                  <input
-                    id="cron"
-                    v-model="form.cron"
-                    type="text"
-                    required
-                    class="input input-bordered w-full"
-                    placeholder="0 9 * * 1 (Every Monday at 9 AM)"
-                  />
-                  <div class="label">
-                    <span class="label-text-alt"
-                      >Use cron format: minute hour day month weekday</span
-                    >
-                  </div>
-                </div> -->
         </div>
         <div class="card-body fr jb ic gap-3 border-t border-base-300">
           <button type="button" class="btn" @click="createModal?.close()">Cancel</button>
@@ -183,7 +164,6 @@ const isSubmitting = ref(false)
 const form = useForm({
   name: '',
   endpoint: '',
-  cron: '0 9 * * 1',
 })
 
 const canCreateMore = computed(() => {
@@ -226,14 +206,6 @@ function createSubscription() {
   isSubmitting.value = true
 
   form.post('/dashboard/subscriptions', {
-    onSuccess: () => {
-      createModal.value?.close()
-      form.reset()
-      toast.success('Subscription created successfully!')
-    },
-    onError: () => {
-      toast.error('Failed to create subscription. Please try again.')
-    },
     onFinish: () => {
       isSubmitting.value = false
     },
@@ -248,7 +220,7 @@ async function toggleSubEnabled(subscriptionId: string) {
   try {
     await http.put(`/subscriptions/${subscription.nid}`, {
       name: subscription.name,
-      cron: subscription.cronExpression,
+      cronExpression: subscription.cronExpression,
       enabled: !subscription.enabled,
       endpoint: subscription.endpoint,
     })

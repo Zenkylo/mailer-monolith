@@ -1,6 +1,7 @@
 import Subscription from '#models/subscription'
 import User from '#models/user'
 import SecureDataFetcher from '#services/secure_data_fetcher'
+import { TRANSLATION_KEYS } from '#types/translation_types'
 import type { HttpContext } from '@adonisjs/core/http'
 import parser from 'cron-parser'
 import { DateTime } from 'luxon'
@@ -19,35 +20,26 @@ export default class SubscriptionsController {
     })
   }
 
-  public async create({ auth, request, response, bouncer }: HttpContext) {
+  public async create({ auth, request, response, bouncer, session, i18n }: HttpContext) {
     const user = auth.user!
 
-    // Use bouncer.authorize() to throw AuthorizationException if denied
     await bouncer.authorize('createSubscription')
 
-    const { name, endpoint, cronExpression, enabled } = request.body()
+    const { name, endpoint } = request.body() // TODO request validator
+    try {
+      const { nid } = await Subscription.create({
+        name,
+        endpoint,
+        userId: user.id,
+        timezone: user.timeZone || 'UTC',
+      })
 
-    const subscription = await Subscription.create({
-      name,
-      endpoint,
-      cronExpression,
-      enabled: enabled ?? true,
-      userId: user.id,
-      timezone: user.timeZone || 'UTC',
-      failureCount: 0,
-    })
-
-    return response.created({
-      success: true,
-      subscription: {
-        id: subscription.id,
-        nid: subscription.nid,
-        name: subscription.name,
-        endpoint: subscription.endpoint,
-        cronExpression: subscription.cronExpression,
-        enabled: subscription.enabled,
-      },
-    })
+      session.flash('success', i18n.t(TRANSLATION_KEYS.SUBSCRIPTIONS.CREATE.SUCCESS_MESSAGE))
+      return response.redirect(`/dashboard/subscriptions/${nid}`)
+    } catch (error) {
+      session.flash('error', i18n.t(TRANSLATION_KEYS.SUBSCRIPTIONS.CREATE.ERRORS.CREATION_FAILED))
+      return response.redirect().back()
+    }
   }
 
   public async show({ auth, inertia, params }: HttpContext) {
