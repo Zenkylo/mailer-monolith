@@ -79,6 +79,10 @@ const props = defineProps({
     type: Object,
     default: () => ({}),
   },
+  csrfToken: {
+    type: String,
+    required: true,
+  },
 })
 
 const form = reactive({
@@ -88,7 +92,10 @@ const form = reactive({
 
 async function submit() {
   try {
-    const response = await http.post('/auth/login', form)
+    const response = await http.post('/auth/login', {
+      ...form,
+      _csrf: props.csrfToken,
+    })
     router.visit('/dashboard', {
       method: 'get',
     })

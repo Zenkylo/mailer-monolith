@@ -8,11 +8,11 @@ import { DateTime } from 'luxon'
 export default class AuthController {
   private readonly emailService = new EmailService()
 
-  showLogin({ inertia, auth, response }: HttpContext) {
+  showLogin({ inertia, auth, response, request }: HttpContext) {
     if (auth.isAuthenticated) {
       return response.redirect('/dashboard')
     }
-    return inertia.render('public/auth/login')
+    return inertia.render('public/auth/login', { csrfToken: request.csrfToken })
   }
 
   showRegister({ inertia, auth, response, request }: HttpContext) {
