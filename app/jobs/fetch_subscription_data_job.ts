@@ -23,13 +23,24 @@ export default class FetchSubscriptionDataJob extends Job<
   async process(): Promise<FetchSubscriptionDataReturn> {
     const { subscriptionId } = this.data
 
-    try {
-      // Load the subscription with user data
-      const subscription = await Subscription.query()
-        .where('id', subscriptionId)
-        .preload('user')
-        .firstOrFail()
+    // Configurable failure threshold
+    const FAILURE_THRESHOLD = 3
 
+    // Load the subscription with user data
+    const subscription = await Subscription.query()
+      .where('id', subscriptionId)
+      .preload('user')
+      .firstOrFail()
+
+    // Check failure count before attempting fetch
+    if ((subscription.failureCount ?? 0) >= FAILURE_THRESHOLD) {
+      logger.warn(
+        `Skipping data fetch for subscription ${subscription.id} due to failure count (${subscription.failureCount}) >= threshold (${FAILURE_THRESHOLD})`
+      )
+      return {}
+    }
+
+    try {
       logger.info(`Fetching data for subscription ${subscription.id} (${subscription.name})`)
 
       // Securely fetch data from the user's endpoint
@@ -48,8 +59,13 @@ export default class FetchSubscriptionDataJob extends Job<
         statusCode: result.status,
       })
 
-      // Mark subscription as successfully run
+      // Mark subscription as successfully run and reset failure count
       await CronService.markAsRun(subscription)
+      // Optionally reset failureCount to 0 if you want to clear on success
+      if (subscription.failureCount && subscription.failureCount > 0) {
+        subscription.failureCount = 0
+        await subscription.save()
+      }
 
       logger.info(`Queued email for subscription ${subscription.id}`)
 
@@ -58,8 +74,9 @@ export default class FetchSubscriptionDataJob extends Job<
       logger.error(`Failed to fetch data for subscription ${subscriptionId}:`, error.message)
 
       try {
-        // Load subscription for error handling
-        const subscription = await Subscription.findOrFail(subscriptionId)
+        // Increment failure count on the already loaded subscription
+        subscription.failureCount = (subscription.failureCount ?? 0) + 1
+        await subscription.save()
 
         // Mark subscription as failed
         await CronService.markAsFailed(subscription, error.message)
